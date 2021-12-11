@@ -89,10 +89,10 @@ string reason;
 bool isSupported = api.IsWslSupported(out reason);
 
 // Enumerate distro list
-var distros = Wsl.GetDistroList();
+var distros = api.GetDistroList();
 
 // Query default distro details
-var defaultDistro = Wsl.GetDefaultDistro();
+var defaultDistro = api.GetDefaultDistro();
 ```
 
 ### Basic command execution
@@ -108,7 +108,7 @@ var distroName = api.GetDefaultDistro()!.Value.DistroName;
 
 // Get command result 
 var cmd = new ManagedCommand(
-    _distroName,
+    distroName,
     "echo",
     new string[] { "-n", "test" },
     new CommandExecutionOptions() { StdoutDataProcessingMode = DataProcessingMode.String }
