@@ -30,7 +30,7 @@ You will need the below items to use the WSL APIs.
 Due to the limitation of COM security model requirements of WSL APIs, 
 you can not run this SDK within the Visual Studio Test Explorer or LINQPAD.
 
-But circumvent this technical limitation, instruct `ComBasedWslApi` to use a different set of native methods:
+To circumvent this technical limitation, instruct `ComBasedWslApi` to use a different set of native methods:
 
 ```csharp
 bool isTestEnv = ...;
@@ -91,7 +91,7 @@ bool isSupported = api.IsWslSupported(out reason);
 // Enumerate distro list
 var distros = Wsl.GetDistroList();
 
-// Query distro informations
+// Query default distro details
 var defaultDistro = Wsl.GetDefaultDistro();
 ```
 
