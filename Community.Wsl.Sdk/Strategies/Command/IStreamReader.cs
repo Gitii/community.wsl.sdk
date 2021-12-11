@@ -1,4 +1,4 @@
-﻿namespace Wslhub.Sdk.Strategies.Command;
+﻿namespace Community.Wsl.Sdk.Strategies.Command;
 
 internal interface IStreamReader
 {

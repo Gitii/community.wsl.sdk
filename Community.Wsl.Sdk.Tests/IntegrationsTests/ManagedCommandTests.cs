@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
+﻿using Community.Wsl.Sdk.Strategies.Api;
+using Community.Wsl.Sdk.Strategies.Command;
+using Community.Wsl.Sdk.Strategies.NativeMethods;
+using FluentAssertions;
 using NUnit.Framework;
-using Wslhub.Sdk.Strategies.Api;
-using Wslhub.Sdk.Strategies.Command;
-using Wslhub.Sdk.Strategies.NativeMethods;
 
-namespace Wslhub.Sdk.Tests.IntegrationsTests;
+namespace Community.Wsl.Sdk.Tests.IntegrationsTests;
 
 internal class ManagedCommandTests
 {
@@ -30,10 +30,10 @@ internal class ManagedCommandTests
         cmd.Start();
         var result = cmd.WaitAndGetResults();
 
-        result.Stdout.Should().BeEquivalentTo("test");
+        AssertionExtensions.Should((string)result.Stdout).BeEquivalentTo("test");
         result.StdoutData.Should().BeNull();
 
-        result.Stderr.Should().BeNull();
+        AssertionExtensions.Should((string)result.Stderr).BeNull();
         result.StderrData.Should().BeNull();
     }
 
@@ -51,10 +51,10 @@ internal class ManagedCommandTests
         cmd.Start();
         var result = cmd.WaitAndGetResults();
 
-        result.Stderr.Should().BeEquivalentTo("test");
+        AssertionExtensions.Should((string)result.Stderr).BeEquivalentTo("test");
         result.StderrData.Should().BeNull();
 
-        result.Stdout.Should().BeNull();
+        AssertionExtensions.Should((string)result.Stdout).BeNull();
         result.StdoutData.Should().BeNull();
     }
 
@@ -64,7 +64,7 @@ internal class ManagedCommandTests
         var cmd = new ManagedCommand(
             _distroName,
             "read",
-            new string[] {"-n", "4"},
+            new string[] { "-n", "4" },
             new CommandExecutionOptions()
             {
                 StdoutDataProcessingMode = DataProcessingMode.String,
@@ -80,10 +80,10 @@ internal class ManagedCommandTests
 
         var result = cmd.WaitAndGetResults();
 
-        result.Stdout.Should().BeEquivalentTo("test");
+        AssertionExtensions.Should((string)result.Stdout).BeEquivalentTo("test");
         result.StdoutData.Should().BeNull();
 
-        result.Stderr.Should().BeEmpty();
+        AssertionExtensions.Should((string)result.Stderr).BeEmpty();
         result.StderrData.Should().BeNull();
     }
 }

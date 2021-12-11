@@ -1,7 +1,7 @@
 ﻿using System;
-using Wslhub.Sdk.Strategies.NativeMethods;
+using Community.Wsl.Sdk.Strategies.NativeMethods;
 
-namespace Wslhub.Sdk
+namespace Community.Wsl.Sdk
 {
     /// <summary>
     /// A model class that contains information.

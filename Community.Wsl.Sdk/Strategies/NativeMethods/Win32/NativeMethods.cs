@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using Microsoft.Win32.SafeHandles;
 
-namespace Wslhub.Sdk.Strategies.NativeMethods.Win32;
+namespace Community.Wsl.Sdk.Strategies.NativeMethods.Win32;
 
 internal static class NativeMethods
 {

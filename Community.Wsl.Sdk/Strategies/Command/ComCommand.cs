@@ -2,10 +2,10 @@
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
+using Community.Wsl.Sdk.Strategies.NativeMethods;
 using Microsoft.Win32.SafeHandles;
-using Wslhub.Sdk.Strategies.NativeMethods;
 
-namespace Wslhub.Sdk.Strategies.Command
+namespace Community.Wsl.Sdk.Strategies.Command
 {
     public class ComCommand : ICommand
     {

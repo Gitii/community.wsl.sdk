@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.Win32.SafeHandles;
 
-namespace Wslhub.Sdk.Strategies.Command;
+namespace Community.Wsl.Sdk.Strategies.Command;
 
 public readonly struct NativePipe : IDisposable
 {

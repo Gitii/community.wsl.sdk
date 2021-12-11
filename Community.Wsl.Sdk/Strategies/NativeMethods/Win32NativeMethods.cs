@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Win32.SafeHandles;
 
-namespace Wslhub.Sdk.Strategies.NativeMethods;
+namespace Community.Wsl.Sdk.Strategies.NativeMethods;
 
 public class Win32NativeMethods : BaseNativeMethods
 {

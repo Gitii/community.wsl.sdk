@@ -1,4 +1,4 @@
-﻿namespace Wslhub.Sdk;
+﻿namespace Community.Wsl.Sdk;
 
 public enum DataProcessingMode
 {

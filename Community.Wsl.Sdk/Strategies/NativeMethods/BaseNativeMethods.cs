@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 
-namespace Wslhub.Sdk.Strategies.NativeMethods
+namespace Community.Wsl.Sdk.Strategies.NativeMethods
 {
     public abstract class BaseNativeMethods
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Wslhub.Sdk
+﻿namespace Community.Wsl.Sdk
 {
     /// <summary>
     /// The result of the executed command in a wsl distro.

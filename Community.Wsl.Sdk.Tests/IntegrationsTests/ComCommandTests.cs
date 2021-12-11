@@ -1,10 +1,10 @@
-﻿using FluentAssertions;
+﻿using Community.Wsl.Sdk.Strategies.Api;
+using Community.Wsl.Sdk.Strategies.Command;
+using Community.Wsl.Sdk.Strategies.NativeMethods;
+using FluentAssertions;
 using NUnit.Framework;
-using Wslhub.Sdk.Strategies.Api;
-using Wslhub.Sdk.Strategies.Command;
-using Wslhub.Sdk.Strategies.NativeMethods;
 
-namespace Wslhub.Sdk.Tests.IntegrationsTests
+namespace Community.Wsl.Sdk.Tests.IntegrationsTests
 {
     internal class ComCommandTests
     {
@@ -33,10 +33,10 @@ namespace Wslhub.Sdk.Tests.IntegrationsTests
             cmd.Start();
             var result = cmd.WaitAndGetResults();
 
-            result.Stdout.Should().BeEquivalentTo("test");
+            AssertionExtensions.Should((string)result.Stdout).BeEquivalentTo("test");
             result.StdoutData.Should().BeNull();
 
-            result.Stderr.Should().BeNull();
+            AssertionExtensions.Should((string)result.Stderr).BeNull();
             result.StderrData.Should().BeNull();
         }
 
@@ -56,10 +56,10 @@ namespace Wslhub.Sdk.Tests.IntegrationsTests
             cmd.Start();
             var result = cmd.WaitAndGetResults();
 
-            result.Stderr.Should().BeEquivalentTo("test");
+            AssertionExtensions.Should((string)result.Stderr).BeEquivalentTo("test");
             result.StderrData.Should().BeNull();
 
-            result.Stdout.Should().BeNull();
+            AssertionExtensions.Should((string)result.Stdout).BeNull();
             result.StdoutData.Should().BeNull();
         }
 
@@ -89,10 +89,10 @@ namespace Wslhub.Sdk.Tests.IntegrationsTests
 
             var result = cmd.WaitAndGetResults();
 
-            result.Stdout.Should().BeEquivalentTo("test");
+            AssertionExtensions.Should((string)result.Stdout).BeEquivalentTo("test");
             result.StdoutData.Should().BeNull();
 
-            result.Stderr.Should().BeNull();
+            AssertionExtensions.Should((string)result.Stderr).BeNull();
             result.StderrData.Should().BeNull();
         }
     }

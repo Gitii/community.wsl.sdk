@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Community.Wsl.Sdk.Strategies.NativeMethods;
 using Microsoft.Win32;
-using Wslhub.Sdk.Strategies.NativeMethods;
 
-namespace Wslhub.Sdk.Strategies.Api;
+namespace Community.Wsl.Sdk.Strategies.Api;
 
 /// <summary>
 /// <inheritdoc cref="IWslApi"/>
@@ -18,6 +18,32 @@ public class ComBasedWslApi : IWslApi
     public ComBasedWslApi(BaseNativeMethods nativeMethods)
     {
         _nativeMethods = nativeMethods;
+    }
+
+    public ComBasedWslApi(): this(new Win32NativeMethods())
+    {
+        
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="IWslApi.InitializeSecurityModel"/>
+    /// </summary>
+    public void InitializeSecurityModel()
+    {
+        var result = _nativeMethods.CoInitializeSecurity(
+            IntPtr.Zero,
+            (-1),
+            IntPtr.Zero,
+            IntPtr.Zero,
+            BaseNativeMethods.RpcAuthnLevel.Default,
+            BaseNativeMethods.RpcImpLevel.Impersonate,
+            IntPtr.Zero,
+            BaseNativeMethods.EoAuthnCap.StaticCloaking,
+            IntPtr.Zero
+        );
+
+        if (result != 0)
+            throw new COMException("Cannot complete CoInitializeSecurity.", result);
     }
 
     /// <summary>

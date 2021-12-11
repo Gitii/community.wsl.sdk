@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Wslhub.Sdk.Strategies.Api;
+namespace Community.Wsl.Sdk.Strategies.Api;
 
 /// <summary>
 /// Provides functionality to help you call WSL from .NET applications.
 /// </summary>
 public interface IWslApi
 {
+    /// <summary>
+    /// Call CoInitializeSecurity so that you can call the WSL API.
+    /// </summary>
+    public void InitializeSecurityModel();
+
     /// <summary>
     /// Checks if the environment you are running in now supports WSL.
     /// </summary>

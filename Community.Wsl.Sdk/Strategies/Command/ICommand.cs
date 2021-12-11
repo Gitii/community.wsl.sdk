@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Wslhub.Sdk.Strategies.Command;
+namespace Community.Wsl.Sdk.Strategies.Command;
 
 public interface ICommand : IDisposable
 {

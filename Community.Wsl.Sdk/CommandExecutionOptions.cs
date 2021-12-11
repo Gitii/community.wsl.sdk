@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Wslhub.Sdk
+namespace Community.Wsl.Sdk
 {
     public struct CommandExecutionOptions
     {

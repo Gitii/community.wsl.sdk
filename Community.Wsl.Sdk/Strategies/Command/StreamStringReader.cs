@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading;
 
-namespace Wslhub.Sdk.Strategies.Command
+namespace Community.Wsl.Sdk.Strategies.Command
 {
     internal class StreamStringReader : IStreamReader
     {

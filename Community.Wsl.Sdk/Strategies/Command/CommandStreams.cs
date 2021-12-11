@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Wslhub.Sdk.Strategies.Command;
+namespace Community.Wsl.Sdk.Strategies.Command;
 
 public class CommandStreams
 {

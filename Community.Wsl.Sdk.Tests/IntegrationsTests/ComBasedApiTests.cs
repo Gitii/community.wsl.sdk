@@ -1,10 +1,10 @@
 ﻿using System;
+using Community.Wsl.Sdk.Strategies.Api;
+using Community.Wsl.Sdk.Strategies.NativeMethods;
 using FluentAssertions;
 using NUnit.Framework;
-using Wslhub.Sdk.Strategies.Api;
-using Wslhub.Sdk.Strategies.NativeMethods;
 
-namespace Wslhub.Sdk.Tests.IntegrationsTests
+namespace Community.Wsl.Sdk.Tests.IntegrationsTests
 {
     [TestFixture]
     public class ComBasedApiTests
@@ -14,7 +14,8 @@ namespace Wslhub.Sdk.Tests.IntegrationsTests
         [SetUp]
         public void Setup()
         {
-            _api = new ComBasedWslApi(new Win32NativeMethods());
+            BaseNativeMethods nativeMethods = new Win32NativeMethods();
+            _api = new ComBasedWslApi(nativeMethods);
 
             if (!_api.IsWslSupported(out var reason))
             {
@@ -27,7 +28,7 @@ namespace Wslhub.Sdk.Tests.IntegrationsTests
         {
             var isSupported = _api.IsWslSupported();
 
-            isSupported.Should().BeTrue();
+            AssertionExtensions.Should((bool)isSupported).BeTrue();
         }
 
         [Test]
@@ -44,7 +45,7 @@ namespace Wslhub.Sdk.Tests.IntegrationsTests
         {
             var defaultDistro = _api.GetDefaultDistro();
 
-            defaultDistro.Should().NotBeNull();
+            AssertionExtensions.Should((object)defaultDistro).NotBeNull();
         }
     }
 }
