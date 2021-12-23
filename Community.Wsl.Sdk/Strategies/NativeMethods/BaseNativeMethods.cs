@@ -67,17 +67,14 @@ namespace Community.Wsl.Sdk.Strategies.NativeMethods
             /// No flags are being supplied.
             /// </summary>
             None = 0x0,
-
             /// <summary>
             /// Allow the distribution to interoperate with Windows processes (for example, the user can invoke "cmd.exe" or "notepad.exe" from within a WSL session).
             /// </summary>
             EnableInterop = 0x1,
-
             /// <summary>
             /// Add the Windows %PATH% environment variable values to WSL sessions.
             /// </summary>
             AppendNtPath = 0x2,
-
             /// <summary>
             /// Automatically mount Windows drives inside of WSL sessions (for example, "C:" will be available under "/mnt/c").
             /// </summary>
@@ -114,16 +111,6 @@ namespace Community.Wsl.Sdk.Strategies.NativeMethods
             int nSize
         );
 
-        public abstract bool ReadFile(
-            SafeFileHandle hFile,
-            IntPtr lpBuffer,
-            int nNumberOfBytesToRead,
-            out int lpNumberOfBytesRead,
-            IntPtr lpOverlapped
-        );
-
-        public const int E_INVALIDARG = unchecked((int)0x80070057);
-
         public const int STD_INPUT_HANDLE = -10;
 
         public const int STD_OUTPUT_HANDLE = -11;
@@ -144,27 +131,6 @@ namespace Community.Wsl.Sdk.Strategies.NativeMethods
         public abstract bool GetExitCodeProcess(IntPtr hProcess, out int lpExitCode);
 
         public abstract bool CloseHandle(SafeFileHandle hObject);
-
-        public abstract bool CloseHandle(IntPtr hObject);
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-        public struct OSVERSIONINFOEXW
-        {
-            public uint dwOSVersionInfoSize;
-            public uint dwMajorVersion;
-            public uint dwMinorVersion;
-            public uint dwBuildNumber;
-            public uint dwPlatformId;
-
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public string szCSDVersion;
-
-            public ushort wServicePackMajor;
-            public ushort wServicePackMinor;
-            public ushort wSuiteMask;
-            public byte wProductType;
-            public byte wReserved;
-        }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct SECURITY_ATTRIBUTES

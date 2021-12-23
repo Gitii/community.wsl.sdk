@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Community.Wsl.Sdk.Strategies.Command;
 
@@ -201,5 +202,72 @@ public class ManagedCommand : ICommand
         _stderrReader.CopyResultTo(ref result, false);
 
         return result;
+    }
+
+    public async Task<CommandResult> WaitAndGetResultsAsync()
+    {
+        if (!IsStarted)
+        {
+            throw new ArgumentException("Command hasn't been started, yet!");
+        }
+
+        if (HasWaited)
+        {
+            throw new Exception("Already waited for the command to finish!");
+        }
+
+        _hasWaited = true;
+
+        await WaitForExit(_process);
+
+        if (_options.FailOnNegativeExitCode && _process.ExitCode != 0)
+        {
+            throw new Exception($"Process exit code is non-zero: {_process.ExitCode}");
+        }
+
+        var result = new CommandResult();
+
+        _stdoutReader.CopyResultTo(ref result, true);
+        _stderrReader.CopyResultTo(ref result, false);
+
+        return result;
+    }
+
+    public CommandResult StartAndGetResults()
+    {
+        Start();
+        return WaitAndGetResults();
+    }
+
+    public Task<CommandResult> StartAndGetResultsAsync()
+    {
+        Start();
+        return WaitAndGetResultsAsync();
+    }
+
+    private Task<int> WaitForExit(Process process)
+    {
+        if (process.HasExited)
+        {
+            return Task.FromResult(process.ExitCode);
+        }
+
+        TaskCompletionSource<int> tcs = new TaskCompletionSource<int>();
+        process.Exited += HasExited;
+
+        if (process.HasExited)
+        {
+            process.Exited -= HasExited;
+            return Task.FromResult(process.ExitCode);
+        }
+
+        return tcs.Task;
+
+        void HasExited(object _, EventArgs __)
+        {
+            tcs.SetResult(process.ExitCode);
+
+            process.Exited -= HasExited;
+        }
     }
 }

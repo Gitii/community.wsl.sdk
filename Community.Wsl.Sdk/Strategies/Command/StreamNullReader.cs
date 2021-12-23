@@ -1,6 +1,6 @@
 ﻿namespace Community.Wsl.Sdk.Strategies.Command;
 
-class StreamNullReader : IStreamReader
+internal class StreamNullReader : IStreamReader
 {
     public void Fetch() { }
 

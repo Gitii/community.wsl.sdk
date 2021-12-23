@@ -39,7 +39,6 @@ namespace Community.Wsl.Sdk.Tests.IntegrationsTests
             distros.Should().NotBeNull().And.HaveCountGreaterThan(0);
         }
 
-
         [Test]
         public void Test_GetDefaultDistro()
         {

@@ -3,7 +3,7 @@ using Microsoft.Win32.SafeHandles;
 
 namespace Community.Wsl.Sdk.Strategies.NativeMethods;
 
-public class Win32NativeMethods : BaseNativeMethods
+public partial class Win32NativeMethods : BaseNativeMethods
 {
     public override int CoInitializeSecurity(
         IntPtr pSecDesc,
@@ -17,7 +17,7 @@ public class Win32NativeMethods : BaseNativeMethods
         IntPtr pReserved3
     )
     {
-        return Win32.NativeMethods.CoInitializeSecurity(
+        return NativeMethods.CoInitializeSecurity(
             pSecDesc,
             cAuthSvc,
             asAuthSvc,
@@ -32,7 +32,7 @@ public class Win32NativeMethods : BaseNativeMethods
 
     public override bool WslIsDistributionRegistered(string distributionName)
     {
-        return Win32.NativeMethods.WslIsDistributionRegistered(distributionName);
+        return NativeMethods.WslIsDistributionRegistered(distributionName);
     }
 
     public override int WslGetDistributionConfiguration(
@@ -44,7 +44,7 @@ public class Win32NativeMethods : BaseNativeMethods
         out int defaultEnvironmentVariableCount
     )
     {
-        return Win32.NativeMethods.WslGetDistributionConfiguration(
+        return NativeMethods.WslGetDistributionConfiguration(
             distributionName,
             out distributionVersion,
             out defaultUID,
@@ -56,7 +56,7 @@ public class Win32NativeMethods : BaseNativeMethods
 
     public override IntPtr GetCurrentProcess()
     {
-        return Win32.NativeMethods.GetCurrentProcess();
+        return NativeMethods.GetCurrentProcess();
     }
 
     public override int WslLaunch(
@@ -69,7 +69,7 @@ public class Win32NativeMethods : BaseNativeMethods
         out IntPtr process
     )
     {
-        return Win32.NativeMethods.WslLaunch(
+        return NativeMethods.WslLaunch(
             distributionName,
             command,
             useCurrentWorkingDirectory,
@@ -87,15 +87,10 @@ public class Win32NativeMethods : BaseNativeMethods
         int nSize
     )
     {
-        return Win32.NativeMethods.CreatePipe(
-            out hReadPipe,
-            out hWritePipe,
-            in lpPipeAttributes,
-            nSize
-        );
+        return NativeMethods.CreatePipe(out hReadPipe, out hWritePipe, in lpPipeAttributes, nSize);
     }
 
-    public override bool ReadFile(
+    public virtual bool ReadFile(
         SafeFileHandle hFile,
         IntPtr lpBuffer,
         int nNumberOfBytesToRead,
@@ -103,7 +98,7 @@ public class Win32NativeMethods : BaseNativeMethods
         IntPtr lpOverlapped
     )
     {
-        return Win32.NativeMethods.ReadFile(
+        return NativeMethods.ReadFile(
             hFile,
             lpBuffer,
             nNumberOfBytesToRead,
@@ -114,27 +109,27 @@ public class Win32NativeMethods : BaseNativeMethods
 
     public override IntPtr GetStdHandle(int nStdHandle)
     {
-        return Win32.NativeMethods.GetStdHandle(nStdHandle);
+        return NativeMethods.GetStdHandle(nStdHandle);
     }
 
     public override int WaitForSingleObject(IntPtr hHandle, int dwMilliseconds)
     {
-        return Win32.NativeMethods.WaitForSingleObject(hHandle, dwMilliseconds);
+        return NativeMethods.WaitForSingleObject(hHandle, dwMilliseconds);
     }
 
     public override bool GetExitCodeProcess(IntPtr hProcess, out int lpExitCode)
     {
-        return Win32.NativeMethods.GetExitCodeProcess(hProcess, out lpExitCode);
+        return NativeMethods.GetExitCodeProcess(hProcess, out lpExitCode);
     }
 
     public override bool CloseHandle(SafeFileHandle hObject)
     {
-        return Win32.NativeMethods.CloseHandle(hObject);
+        return NativeMethods.CloseHandle(hObject);
     }
 
-    public override bool CloseHandle(IntPtr hObject)
+    public virtual bool CloseHandle(IntPtr hObject)
     {
-        return Win32.NativeMethods.CloseHandle(hObject);
+        return NativeMethods.CloseHandle(hObject);
     }
 
     public override bool DuplicateHandle(
@@ -147,7 +142,7 @@ public class Win32NativeMethods : BaseNativeMethods
         DuplicateOptions dwOptions
     )
     {
-        return Win32.NativeMethods.DuplicateHandle(
+        return NativeMethods.DuplicateHandle(
             hSourceProcessHandle,
             hSourceHandle,
             hTargetProcessHandle,

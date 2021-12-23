@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Community.Wsl.Sdk.Strategies.Command;
 
@@ -10,4 +11,7 @@ public interface ICommand : IDisposable
     bool HasExited { get; }
     CommandStreams Start();
     CommandResult WaitAndGetResults();
+    Task<CommandResult> WaitAndGetResultsAsync();
+    CommandResult StartAndGetResults();
+    Task<CommandResult> StartAndGetResultsAsync();
 }

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Community.Wsl.Sdk.Strategies.NativeMethods;
-using Microsoft.Win32;
 
 namespace Community.Wsl.Sdk.Strategies.Api;
 
@@ -13,16 +12,13 @@ namespace Community.Wsl.Sdk.Strategies.Api;
 /// </summary>
 public class ComBasedWslApi : IWslApi
 {
-    private BaseNativeMethods _nativeMethods;
+    private readonly BaseNativeMethods _nativeMethods;
+    private readonly IRegistry _registry;
 
-    public ComBasedWslApi(BaseNativeMethods nativeMethods)
+    public ComBasedWslApi(BaseNativeMethods? nativeMethods = null, IRegistry? registry = null)
     {
-        _nativeMethods = nativeMethods;
-    }
-
-    public ComBasedWslApi(): this(new Win32NativeMethods())
-    {
-        
+        _nativeMethods = nativeMethods ?? new Win32NativeMethods();
+        _registry = registry ?? new Win32Registry();
     }
 
     /// <summary>
@@ -56,16 +52,11 @@ public class ComBasedWslApi : IWslApi
             throw new PlatformNotSupportedException(missingCapabilities);
         }
 
-        var currentUser = Registry.CurrentUser;
+        var currentUser = _registry.GetCurrentUser();
         var lxssPath = Path.Combine("SOFTWARE", "Microsoft", "Windows", "CurrentVersion", "Lxss");
 
-        using var lxssKey = currentUser.OpenSubKey(lxssPath, false);
-        var defaultGuid = Guid.TryParse(
-            lxssKey.GetValue("DefaultDistribution", default(string)) as string,
-            out Guid parsedDefaultGuid
-        )
-            ? parsedDefaultGuid
-            : default(Guid?);
+        using var lxssKey = currentUser.OpenSubKey(lxssPath);
+        var defaultGuid = lxssKey.GetValue<Guid>("DefaultDistribution");
 
         return lxssKey
             .GetSubKeyNames()
@@ -116,12 +107,12 @@ public class ComBasedWslApi : IWslApi
     }
 
     private DistroInfo? ReadFromRegistryKey(
-        RegistryKey distroKey,
+        IRegistryKey distroKey,
         Guid parsedGuid,
         Guid? parsedDefaultGuid
     )
     {
-        var distroName = distroKey.GetValue("DistributionName", default(string)) as string;
+        var distroName = distroKey.GetValue("DistributionName", string.Empty);
 
         if (string.IsNullOrWhiteSpace(distroName))
         {

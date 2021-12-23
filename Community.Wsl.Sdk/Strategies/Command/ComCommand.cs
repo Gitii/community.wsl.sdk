@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Community.Wsl.Sdk.Strategies.NativeMethods;
 using Microsoft.Win32.SafeHandles;
 
@@ -165,6 +166,23 @@ namespace Community.Wsl.Sdk.Strategies.Command
             };
         }
 
+        public Task<CommandResult> WaitAndGetResultsAsync()
+        {
+            throw new NotSupportedException();
+        }
+
+        public CommandResult StartAndGetResults()
+        {
+            Start();
+            return WaitAndGetResults();
+        }
+
+        public Task<CommandResult> StartAndGetResultsAsync()
+        {
+            Start();
+            return WaitAndGetResultsAsync();
+        }
+
         private void CreatePipe(
             out SafeFileHandle readPipe,
             out SafeFileHandle writePipe,
@@ -323,26 +341,6 @@ namespace Community.Wsl.Sdk.Strategies.Command
                 Stdout = stdOutStringData,
                 StdoutData = stdOutRawData
             };
-        }
-
-        private unsafe byte ReadFile(SafeFileHandle handle)
-        {
-            var bufferPointer = Marshal.AllocHGlobal(1);
-            var pBufferPointer = (byte*)bufferPointer.ToPointer();
-            var read = 0;
-
-            if (!_nativeMethods.ReadFile(handle, bufferPointer, 1, out read, IntPtr.Zero))
-            {
-                var lastError = Marshal.GetLastWin32Error();
-                Marshal.FreeHGlobal(bufferPointer);
-
-                if (lastError != 0)
-                    throw new Win32Exception(lastError, "Cannot read data from pipe.");
-            }
-
-            Marshal.FreeHGlobal(bufferPointer);
-
-            return *pBufferPointer;
         }
 
         private void ReadData(

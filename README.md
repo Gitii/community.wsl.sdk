@@ -60,6 +60,8 @@ Use class `ComBasedWslApi` and an implementation of `BaseNativeMethods`, if desi
 There are two implementations, one uses the com based api to execute, the other calls `wsl.exe` internally.
 The com based implementation has proven to be quite limited and somehow buggy.
 
+All implementations implement `ICommand`. Feel free to use your favorite DI or mocking framework to help with testing.
+
 #### `wsl.exe` based (recommended)
 
 Use class `ManagedCommand`
