@@ -33,9 +33,9 @@ public readonly struct NativePipe : IDisposable
     {
         ReadHandle?.Dispose();
         WriteHandle?.Dispose();
-        Reader.Close();
-        Reader.Dispose();
-        Writer.Close();
-        Writer.Dispose();
+        Reader?.Close();
+        Reader?.Dispose();
+        Writer?.Close();
+        Writer?.Dispose();
     }
 }

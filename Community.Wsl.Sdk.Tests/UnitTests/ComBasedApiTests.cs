@@ -18,7 +18,7 @@ namespace Community.Wsl.Sdk.Tests.UnitTests
                     () =>
                         nm.CoInitializeSecurity(
                             IntPtr.Zero,
-                            (-1),
+                            -1,
                             IntPtr.Zero,
                             IntPtr.Zero,
                             BaseNativeMethods.RpcAuthnLevel.Default,
@@ -40,7 +40,7 @@ namespace Community.Wsl.Sdk.Tests.UnitTests
                     () =>
                         nm.CoInitializeSecurity(
                             IntPtr.Zero,
-                            (-1),
+                            -1,
                             IntPtr.Zero,
                             IntPtr.Zero,
                             BaseNativeMethods.RpcAuthnLevel.Default,

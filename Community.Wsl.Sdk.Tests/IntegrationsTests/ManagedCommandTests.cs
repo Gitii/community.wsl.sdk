@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace Community.Wsl.Sdk.Tests.IntegrationsTests;
 
+[TestFixture(Category = "Integration")]
 internal class ManagedCommandTests
 {
     private string _distroName;
@@ -30,10 +31,10 @@ internal class ManagedCommandTests
         cmd.Start();
         var result = cmd.WaitAndGetResults();
 
-        AssertionExtensions.Should((string)result.Stdout).BeEquivalentTo("test");
+        result.Stdout.Should().BeEquivalentTo("test");
         result.StdoutData.Should().BeNull();
 
-        AssertionExtensions.Should((string)result.Stderr).BeNull();
+        result.Stderr.Should().BeNull();
         result.StderrData.Should().BeNull();
     }
 
@@ -51,10 +52,10 @@ internal class ManagedCommandTests
         cmd.Start();
         var result = cmd.WaitAndGetResults();
 
-        AssertionExtensions.Should((string)result.Stderr).BeEquivalentTo("test");
+        result.Stderr.Should().BeEquivalentTo("test");
         result.StderrData.Should().BeNull();
 
-        AssertionExtensions.Should((string)result.Stdout).BeNull();
+        result.Stdout.Should().BeNull();
         result.StdoutData.Should().BeNull();
     }
 
@@ -80,10 +81,10 @@ internal class ManagedCommandTests
 
         var result = cmd.WaitAndGetResults();
 
-        AssertionExtensions.Should((string)result.Stdout).BeEquivalentTo("test");
+        result.Stdout.Should().BeEquivalentTo("test");
         result.StdoutData.Should().BeNull();
 
-        AssertionExtensions.Should((string)result.Stderr).BeEmpty();
+        result.Stderr.Should().BeEmpty();
         result.StderrData.Should().BeNull();
     }
 }

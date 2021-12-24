@@ -1,0 +1,51 @@
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+      - uses: olegtarasov/get-tag@v2.1
+        id: tagName
+        with:
+          tagRegex: "v(.*)" 
+          tagRegexGroup: 1
+      - uses: actions/checkout@v2
+      - name: Extract release notes
+        run: |
+          git log --pretty=format:'%d %s' ${GITHUB_REF} | perl -pe 's| \(.*tag: v(\d+.\d+.\d+(-preview\d{3})?)(, .*?)*\)|\n## \1\n|g' > ./RELEASE-NOTES.txt; if (-! $?) { exit 1 } else { exit $LastExitCode }
+      - name: Setup .NET SDKs
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: | 
+            3.1.x
+            5.0.x
+            6.0.x
+          include-prerelease: true
+      - name: Decode the Pfx
+        run: |
+          $signing_keys_payload = [System.Convert]::FromBase64String("${{ secrets.SIGNING_KEY }}")
+          $currentDirectory = Get-Location
+          $certificatePath = Join-Path -Path $currentDirectory -ChildPath "sgKey.snk"
+          [IO.File]::WriteAllBytes("$certificatePath", $signing_keys_payload)
+          if (-! $?) { exit 1 } else { exit $LastExitCode }
+      - name: Build
+        run: dotnet build -p:Configuration=Release -p:Version="$env:TAG_NAME"
+        env:
+          TAG_NAME: ${{ steps.tagName.outputs.tag }}
+      - name: Test
+        run: dotnet test -p:Configuration=Release --filter TestCategory!=Integration --no-build
+      - name: Pack
+        run: dotnet pack -p:Configuration=Release -o "$(Join-Path $(Get-Location) nuget)" /p:Version="$env:TAG_NAME" --no-build
+        env:
+          TAG_NAME: ${{ steps.tagName.outputs.tag }}
+      - name: Attach nuget packages to Github releases
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "./nuget/*.nupkg"
+#      - name: Push packages to Nuget registry
+#        run: dotnet nuget push $(Get-ChildItem -Path ./nuget -Filter "*.nupkg").FullName --source "https://api.nuget.org/v3/index.json" --api-key "$env:NUGET_API_KEY" --skip-duplicate --no-symbols 1
+#        env:
+#          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

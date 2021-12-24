@@ -24,11 +24,17 @@ namespace Community.Wsl.Sdk.Strategies.Command
 
         private BaseNativeMethods _nativeMethods;
 
-        public ComCommand(string distroName, string commandLine, CommandExecutionOptions options)
+        public ComCommand(
+            string distroName,
+            string commandLine,
+            CommandExecutionOptions options,
+            BaseNativeMethods? nativeMethods = null
+        )
         {
             _distroName = distroName ?? throw new ArgumentNullException(nameof(distroName));
             _commandLine = commandLine ?? throw new ArgumentNullException(nameof(commandLine));
             _options = options;
+            _nativeMethods = nativeMethods ?? new Win32NativeMethods();
         }
 
         public bool IsStarted => _isStarted;
@@ -142,8 +148,10 @@ namespace Community.Wsl.Sdk.Strategies.Command
 
             _hasWaited = true;
 
-            _nativeMethods.CloseHandle(_stdinHandle.WriteHandle!);
-            // NativeMethods.CloseHandle(_stdinHandle.ReadHandle!);
+            if (_stdinHandle.WriteHandle != null)
+            {
+                _nativeMethods.CloseHandle(_stdinHandle.WriteHandle);
+            }
 
             _nativeMethods.WaitForSingleObject(_childProcess.Value, BaseNativeMethods.INFINITE);
 

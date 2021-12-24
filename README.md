@@ -14,7 +14,7 @@ features into existing Windows applications. You can enumerate, query, executing
 ## Supported Operating Systems
 
 - Windows 10 x64 16299 or higher 
-- Windows 11
+- Windows 11 x64
 
 ## How to use
 

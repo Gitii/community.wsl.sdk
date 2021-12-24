@@ -7,9 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.Wsl.Sdk", "Commun
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CCC54C91-468C-42A1-BA2A-424C9B185AEA}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		.onsaveconfig = .onsaveconfig
+		.github\workflows\ci.yml = .github\workflows\ci.yml
 		License = License
+		nuget.config = nuget.config
 		README.md = README.md
+		.github\workflows\release.yml = .github\workflows\release.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Community.Wsl.Sdk.Tests", "Community.Wsl.Sdk.Tests\Community.Wsl.Sdk.Tests.csproj", "{31610E38-396C-4DA0-9002-0B3A0E6CA4DA}"

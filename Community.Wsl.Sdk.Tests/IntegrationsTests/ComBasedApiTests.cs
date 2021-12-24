@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace Community.Wsl.Sdk.Tests.IntegrationsTests
 {
-    [TestFixture]
+    [TestFixture(Category = "Integration")]
     public class ComBasedApiTests
     {
         private IWslApi _api;
@@ -24,11 +24,11 @@ namespace Community.Wsl.Sdk.Tests.IntegrationsTests
         }
 
         [Test]
-        public void Test_SystemAssertion()
+        public void Test_IsWslSupported()
         {
             var isSupported = _api.IsWslSupported();
 
-            AssertionExtensions.Should((bool)isSupported).BeTrue();
+            isSupported.Should().BeTrue();
         }
 
         [Test]
@@ -36,7 +36,7 @@ namespace Community.Wsl.Sdk.Tests.IntegrationsTests
         {
             var distros = _api.GetDistroList();
 
-            distros.Should().NotBeNull().And.HaveCountGreaterThan(0);
+            distros.Should().NotBeNull();
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace Community.Wsl.Sdk.Tests.IntegrationsTests
         {
             var defaultDistro = _api.GetDefaultDistro();
 
-            AssertionExtensions.Should((object)defaultDistro).NotBeNull();
+            defaultDistro.Should().NotBeNull();
         }
     }
 }

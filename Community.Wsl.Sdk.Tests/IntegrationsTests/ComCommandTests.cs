@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace Community.Wsl.Sdk.Tests.IntegrationsTests
 {
+    [TestFixture(Category = "Integration")]
     internal class ComCommandTests
     {
         private string _distroName;
@@ -33,10 +34,10 @@ namespace Community.Wsl.Sdk.Tests.IntegrationsTests
             cmd.Start();
             var result = cmd.WaitAndGetResults();
 
-            AssertionExtensions.Should((string)result.Stdout).BeEquivalentTo("test");
+            result.Stdout.Should().BeEquivalentTo("test");
             result.StdoutData.Should().BeNull();
 
-            AssertionExtensions.Should((string)result.Stderr).BeNull();
+            result.Stderr.Should().BeNull();
             result.StderrData.Should().BeNull();
         }
 
@@ -56,44 +57,11 @@ namespace Community.Wsl.Sdk.Tests.IntegrationsTests
             cmd.Start();
             var result = cmd.WaitAndGetResults();
 
-            AssertionExtensions.Should((string)result.Stderr).BeEquivalentTo("test");
+            result.Stderr.Should().BeEquivalentTo("test");
             result.StderrData.Should().BeNull();
 
-            AssertionExtensions.Should((string)result.Stdout).BeNull();
+            result.Stdout.Should().BeNull();
             result.StdoutData.Should().BeNull();
-        }
-
-        [Test]
-        public void Test_expect_stdout_to_equal_stdin()
-        {
-            var cmd = new ComCommand(
-                _distroName,
-                "/tmp/err.sh",
-                new CommandExecutionOptions()
-                {
-                    StdoutDataProcessingMode = DataProcessingMode.String,
-                    StdErrDataProcessingMode = DataProcessingMode.String,
-                    StdInDataProcessingMode = DataProcessingMode.External,
-                    FailOnNegativeExitCode = false
-                }
-            );
-
-            var pipes = cmd.Start();
-            // cmd.HasExited.Should().BeFalse();
-
-            // Thread.Sleep(1000);
-
-            // cmd.HasExited.Should().BeFalse();
-
-            pipes.StandardInput.Write("testtest");
-
-            var result = cmd.WaitAndGetResults();
-
-            AssertionExtensions.Should((string)result.Stdout).BeEquivalentTo("test");
-            result.StdoutData.Should().BeNull();
-
-            AssertionExtensions.Should((string)result.Stderr).BeNull();
-            result.StderrData.Should().BeNull();
         }
     }
 }
