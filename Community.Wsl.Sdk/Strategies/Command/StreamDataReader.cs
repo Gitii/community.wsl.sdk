@@ -65,4 +65,9 @@ internal class StreamDataReader : IStreamReader
             result = result with { StderrData = Data, Stderr = null };
         }
     }
+
+    public void Wait()
+    {
+        _thread?.Join();
+    }
 }

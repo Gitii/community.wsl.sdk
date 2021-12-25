@@ -135,8 +135,9 @@ public class ComBasedWslApi : IWslApi
             if (hr != 0)
                 throw new Exception("Cannot query wsl distro configuration.");
 
-            var basePath = distroKey.GetValue("BasePath", default(string)) as string;
-            var normalizedPath = Path.GetFullPath(basePath);
+            var basePath = distroKey.GetValue<string?>("BasePath", null);
+            var normalizedPath =
+                Path.GetFullPath(basePath ?? throw new ArgumentException("Base path is invalid"));
 
             var kernelCommandLine = (
                 distroKey.GetValue("KernelCommandLine", default(string)) as string ?? string.Empty

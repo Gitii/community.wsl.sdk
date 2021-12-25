@@ -120,7 +120,7 @@ namespace Community.Wsl.Sdk.Strategies.Command
                     StandardError = _stderrHandle.Reader
                 };
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Dispose();
                 throw;

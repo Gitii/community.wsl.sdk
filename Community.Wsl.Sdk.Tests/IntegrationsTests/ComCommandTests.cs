@@ -1,4 +1,5 @@
-﻿using Community.Wsl.Sdk.Strategies.Api;
+﻿using System;
+using Community.Wsl.Sdk.Strategies.Api;
 using Community.Wsl.Sdk.Strategies.Command;
 using Community.Wsl.Sdk.Strategies.NativeMethods;
 using FluentAssertions;
@@ -9,7 +10,7 @@ namespace Community.Wsl.Sdk.Tests.IntegrationsTests
     [TestFixture(Category = "Integration")]
     internal class ComCommandTests
     {
-        private string _distroName;
+        private string _distroName = String.Empty;
 
         [SetUp]
         public void Setup()

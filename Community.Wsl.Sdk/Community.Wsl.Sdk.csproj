@@ -57,7 +57,7 @@
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>Community.Wsl.Sdk.Tests, PublicKey=4af63d53d20337f6</_Parameter1>
+      <_Parameter1>Community.Wsl.Sdk.Tests, PublicKey=00240000048000009400000006020000002400005253413100040000010001003947db54a558193aa462a18785f5afbc15f4d8b12126eae04e89189e078a6349024007dff87b2a0ee917584a0a1503843c95c54d2ed27550ca4e202f0f8650e3904985b3b894e06fda55c1a8491fd1372b179aa24ccd427b96debdc4c1cc61663bd829b08c4097dd4a04738fb032ad45cf53645c24be7f48bf33fedb741201bb</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 

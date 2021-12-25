@@ -61,5 +61,10 @@ namespace Community.Wsl.Sdk.Strategies.Command
                 result = result with { StderrData = null, Stderr = Data };
             }
         }
+
+        public void Wait()
+        {
+            _thread?.Join();
+        }
     }
 }

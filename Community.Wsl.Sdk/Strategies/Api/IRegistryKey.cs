@@ -5,8 +5,8 @@ namespace Community.Wsl.Sdk.Strategies.Api;
 
 public interface IRegistryKey : IDisposable
 {
-    public T? GetValue<T>(string name);
-    public T? GetValue<T>(string name, T? defaultValue);
+    public T GetValue<T>(string name);
+    public T GetValue<T>(string name, T defaultValue);
     public string[] GetSubKeyNames();
 
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Win32;
 
 namespace Community.Wsl.Sdk.Strategies.Api;
@@ -12,27 +13,32 @@ internal class Win32RegistryKey : IRegistryKey
         _registryKey = registryKey;
     }
 
-    public T? GetValue<T>(string name)
+    public T GetValue<T>(string name)
     {
-        return GetValue<T>(name, default(T));
+        var value = GetValue<T>(name, default(T)!);
+        if (value == null || value.Equals(default(T)))
+        {
+            throw new KeyNotFoundException($"The registry key {name} doesn't exist!");
+        }
+
+        return value;
     }
 
-    public T? GetValue<T>(string name, T? defaultValue)
+    public T GetValue<T>(string name, T defaultValue)
     {
-        object value = _registryKey.GetValue(name);
+        object? value = _registryKey.GetValue(name);
 
-        if (typeof(T) == typeof(string))
+        if (value == null)
         {
-            return (T)value ?? defaultValue;
+            return defaultValue;
+        }
+        else if (typeof(T) == value.GetType())
+        {
+            return (T)value;
         }
         else if (typeof(T) == typeof(Guid))
         {
-            string? strValue = GetValue<string>(name);
-
-            if (string.IsNullOrEmpty(strValue))
-            {
-                return defaultValue;
-            }
+            string strValue = GetValue<string>(name);
 
             return (T)(object)Guid.Parse(strValue);
         }
@@ -51,7 +57,7 @@ internal class Win32RegistryKey : IRegistryKey
     {
         return new Win32RegistryKey(
             _registryKey.OpenSubKey(subKey, false)
-                ?? throw new Exception("There is no sub key " + subKey)
+            ?? throw new Exception("There is no sub key " + subKey)
         );
     }
 

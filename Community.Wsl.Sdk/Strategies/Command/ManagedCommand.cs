@@ -37,6 +37,10 @@ public class ManagedCommand : ICommand
         _command = command;
         _arguments = arguments;
         _distroName = distroName;
+
+        _stderrReader = new StreamNullReader();
+        _stdoutReader = new StreamNullReader();
+        _stderrReader = new StreamNullReader();
     }
 
     public void Dispose()
@@ -198,7 +202,10 @@ public class ManagedCommand : ICommand
 
         var result = new CommandResult();
 
+        _stdoutReader.Wait();
         _stdoutReader.CopyResultTo(ref result, true);
+
+        _stderrReader.Wait();
         _stderrReader.CopyResultTo(ref result, false);
 
         return result;
@@ -218,7 +225,7 @@ public class ManagedCommand : ICommand
 
         _hasWaited = true;
 
-        await WaitForExit(_process);
+        await WaitForExit(_process!);
 
         if (_options.FailOnNegativeExitCode && _process.ExitCode != 0)
         {

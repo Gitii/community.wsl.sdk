@@ -9,7 +9,7 @@ namespace Community.Wsl.Sdk.Tests.IntegrationsTests
     [TestFixture(Category = "Integration")]
     public class ComBasedApiTests
     {
-        private IWslApi _api;
+        private IWslApi _api = new ComBasedWslApi();
 
         [SetUp]
         public void Setup()
