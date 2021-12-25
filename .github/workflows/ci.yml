@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -20,7 +20,12 @@ jobs:
           5.0.x
           6.0.x
     - name: Decode the Pfx
-      run: echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > ./sgKey.snk  
+      run: |
+        $signing_keys_payload = [System.Convert]::FromBase64String("${{ secrets.SIGNING_KEY }}")
+        $currentDirectory = Get-Location
+        $certificatePath = Join-Path -Path $currentDirectory -ChildPath "sgKey.snk"
+        [IO.File]::WriteAllBytes("$certificatePath", $signing_keys_payload)
+        if (-! $?) { exit 1 } else { exit $LastExitCode }
     - name: Build
       run: dotnet build --configuration Release
     - name: Test

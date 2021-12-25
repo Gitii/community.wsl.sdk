@@ -13,7 +13,7 @@ features into existing Windows applications. You can enumerate, query, executing
 
 ## Supported Operating Systems
 
-- Windows 10 x64 16299 or higher 
+- Windows 10 x64 16299 or higher
 - Windows 11 x64
 
 ## How to use
@@ -23,6 +23,15 @@ There are two different implementations of `IWslApi`:
 - An alternative implementation that uses `wsl.exe` and (mostly) public information stored in the registry.
 
 It's recommended to use the alternative because it's more versatile and easier to use.
+
+## How to install
+
+This package is available on `nuget.org`: https://www.nuget.org/packages/Community.Wsl.Sdk  
+You can add a reference using `dotnet / nuget`:
+
+```shell
+dotnet add package Community.Wsl.Sdk
+```
 
 ## API
 

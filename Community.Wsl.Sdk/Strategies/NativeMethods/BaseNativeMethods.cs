@@ -67,14 +67,17 @@ namespace Community.Wsl.Sdk.Strategies.NativeMethods
             /// No flags are being supplied.
             /// </summary>
             None = 0x0,
+
             /// <summary>
             /// Allow the distribution to interoperate with Windows processes (for example, the user can invoke "cmd.exe" or "notepad.exe" from within a WSL session).
             /// </summary>
             EnableInterop = 0x1,
+
             /// <summary>
             /// Add the Windows %PATH% environment variable values to WSL sessions.
             /// </summary>
             AppendNtPath = 0x2,
+
             /// <summary>
             /// Automatically mount Windows drives inside of WSL sessions (for example, "C:" will be available under "/mnt/c").
             /// </summary>
@@ -112,9 +115,7 @@ namespace Community.Wsl.Sdk.Strategies.NativeMethods
         );
 
         public const int STD_INPUT_HANDLE = -10;
-
         public const int STD_OUTPUT_HANDLE = -11;
-
         public const int STD_ERROR_HANDLE = -12;
 
         public abstract IntPtr GetStdHandle(int nStdHandle);
@@ -123,10 +124,10 @@ namespace Community.Wsl.Sdk.Strategies.NativeMethods
 
         public abstract int WaitForSingleObject(IntPtr hHandle, int dwMilliseconds);
 
-        public const int WAIT_ABANDONED = 0x00000080,
-            WAIT_OBJECT_0 = 0x00000000,
-            WAIT_TIMEOUT = 0x00000102,
-            WAIT_FAILED = unchecked((int)0xFFFFFFFF);
+        public const int WAIT_ABANDONED = 0x00000080;
+        public const int WAIT_OBJECT_0 = 0x00000000;
+        public const int WAIT_TIMEOUT = 0x00000102;
+        public const int WAIT_FAILED = unchecked((int)0xFFFFFFFF);
 
         public abstract bool GetExitCodeProcess(IntPtr hProcess, out int lpExitCode);
 
@@ -135,13 +136,11 @@ namespace Community.Wsl.Sdk.Strategies.NativeMethods
         [StructLayout(LayoutKind.Sequential)]
         public struct SECURITY_ATTRIBUTES
         {
-            [MarshalAs(UnmanagedType.U4)]
-            public int nLength;
+            [MarshalAs(UnmanagedType.U4)] public int nLength;
 
             public IntPtr lpSecurityDescriptor;
 
-            [MarshalAs(UnmanagedType.Bool)]
-            public bool bInheritHandle;
+            [MarshalAs(UnmanagedType.Bool)] public bool bInheritHandle;
         }
 
         public abstract bool DuplicateHandle(
@@ -157,8 +156,11 @@ namespace Community.Wsl.Sdk.Strategies.NativeMethods
         [Flags]
         public enum DuplicateOptions : uint
         {
-            DUPLICATE_CLOSE_SOURCE = (0x00000001), // Closes the source handle. This occurs regardless of any error status returned.
-            DUPLICATE_SAME_ACCESS = (0x00000002) //Ignores the dwDesiredAccess parameter. The duplicate handle has the same access as the source handle.
+            DUPLICATE_CLOSE_SOURCE =
+                (0x00000001), // Closes the source handle. This occurs regardless of any error status returned.
+
+            DUPLICATE_SAME_ACCESS =
+                (0x00000002) //Ignores the dwDesiredAccess parameter. The duplicate handle has the same access as the source handle.
         }
 
         public const uint STILL_ACTIVE = 0x00000103;
