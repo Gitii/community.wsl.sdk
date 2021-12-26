@@ -2,13 +2,14 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using Community.Wsl.Sdk.Strategies.Api;
 
 namespace Community.Wsl.Sdk.Strategies.Command;
 
 public class ManagedCommand : ICommand
 {
     private ProcessStartInfo? _startInfo;
-    private Process? _process;
+    private IProcess? _process;
     private bool _isStarted = false;
     private bool _hasWaited = false;
     private bool _isDisposed = false;
@@ -22,15 +23,26 @@ public class ManagedCommand : ICommand
     private IStreamReader _stdoutReader;
     private IStreamReader _stderrReader;
 
+    private IEnvironment _environment;
+    private IIo _io;
+    private IProcessManager _processManager;
+
     public ManagedCommand(
         string distroName,
         string command,
         string[] arguments,
         CommandExecutionOptions options,
         bool asRoot = false,
-        bool shellExecute = false
+        bool shellExecute = false,
+        IEnvironment? environment = null,
+        IIo? io = null,
+        IProcessManager? processManager = null
     )
     {
+        _environment = environment ?? new Win32Environment();
+        _io = io ?? new Win32IO();
+        _processManager = processManager ?? new Win32ProcessManager();
+
         _options = options;
         _asRoot = asRoot;
         _shellExecute = shellExecute;
@@ -70,8 +82,8 @@ public class ManagedCommand : ICommand
 
         _isStarted = true;
 
-        var wslPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.System),
+        var wslPath = _io.Combine(
+            _environment.GetFolderPath(Environment.SpecialFolder.System),
             "wsl.exe"
         );
 
@@ -124,7 +136,8 @@ public class ManagedCommand : ICommand
             _startInfo.StandardInputEncoding = _options.StdinEncoding ?? Console.InputEncoding;
         }
 
-        var process = Process.Start(_startInfo) ?? throw new Exception("Cannot start wsl process.");
+        var process =
+            _processManager.Start(_startInfo) ?? throw new Exception("Cannot start wsl process.");
 
         _process = process;
 
@@ -227,14 +240,17 @@ public class ManagedCommand : ICommand
 
         await WaitForExit(_process!);
 
-        if (_options.FailOnNegativeExitCode && _process.ExitCode != 0)
+        if (_options.FailOnNegativeExitCode && _process!.ExitCode != 0)
         {
             throw new Exception($"Process exit code is non-zero: {_process.ExitCode}");
         }
 
         var result = new CommandResult();
 
+        await _stdoutReader.WaitAsync();
         _stdoutReader.CopyResultTo(ref result, true);
+
+        await _stderrReader.WaitAsync();
         _stderrReader.CopyResultTo(ref result, false);
 
         return result;
@@ -252,7 +268,7 @@ public class ManagedCommand : ICommand
         return WaitAndGetResultsAsync();
     }
 
-    private Task<int> WaitForExit(Process process)
+    private Task<int> WaitForExit(IProcess process)
     {
         if (process.HasExited)
         {
@@ -260,6 +276,7 @@ public class ManagedCommand : ICommand
         }
 
         TaskCompletionSource<int> tcs = new TaskCompletionSource<int>();
+        process.EnableRaisingEvents = true;
         process.Exited += HasExited;
 
         if (process.HasExited)
