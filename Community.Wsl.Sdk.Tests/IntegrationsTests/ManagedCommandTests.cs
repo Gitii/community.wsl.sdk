@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Community.Wsl.Sdk.Strategies.Api;
 using Community.Wsl.Sdk.Strategies.Command;
 using Community.Wsl.Sdk.Strategies.NativeMethods;
@@ -86,6 +87,26 @@ internal class ManagedCommandTests
         result.StdoutData.Should().BeNull();
 
         result.Stderr.Should().BeEmpty();
+        result.StderrData.Should().BeNull();
+    }
+
+    [Test]
+    public async Task Test_async_wait()
+    {
+        var cmd = new ManagedCommand(
+            _distroName,
+            "echo",
+            new string[] { "-n", "test" },
+            new CommandExecutionOptions() { StdoutDataProcessingMode = DataProcessingMode.String }
+        );
+
+        cmd.Start();
+        var result = await cmd.WaitAndGetResultsAsync();
+
+        result.Stdout.Should().BeEquivalentTo("test");
+        result.StdoutData.Should().BeNull();
+
+        result.Stderr.Should().BeNull();
         result.StderrData.Should().BeNull();
     }
 }
