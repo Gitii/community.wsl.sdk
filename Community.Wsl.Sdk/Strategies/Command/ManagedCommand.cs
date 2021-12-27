@@ -94,7 +94,16 @@ public class ManagedCommand : ICommand
 
         if (_asRoot)
         {
-            _startInfo.ArgumentList.Add("--system");
+            if (_environment.OSVersion.Version.Build >= 22000)
+            {
+                // on Windows 11 use newer switch
+                _startInfo.ArgumentList.Add("--system");
+            }
+            else
+            {
+                _startInfo.ArgumentList.Add("--user");
+                _startInfo.ArgumentList.Add("root");
+            }
         }
 
         if (_shellExecute)
