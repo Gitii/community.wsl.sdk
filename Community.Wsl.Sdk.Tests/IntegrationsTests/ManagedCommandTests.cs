@@ -109,4 +109,36 @@ internal class ManagedCommandTests
         result.Stderr.Should().BeNull();
         result.StderrData.Should().BeNull();
     }
+
+    [Test]
+    public void Test_exit_code()
+    {
+        var cmd = new ManagedCommand(
+            _distroName,
+            "this_command_doesnt_exit",
+            new[] { "-n", "test" },
+            new CommandExecutionOptions() { FailOnNegativeExitCode = false }
+        );
+
+        cmd.Start();
+        var result = cmd.WaitAndGetResults();
+
+        result.ExitCode.Should().NotBe(0);
+    }
+
+    [Test]
+    public async Task Test_exit_code_async()
+    {
+        var cmd = new ManagedCommand(
+            _distroName,
+            "this_command_doesnt_exit",
+            new[] { "-n", "test" },
+            new CommandExecutionOptions() { FailOnNegativeExitCode = false }
+        );
+
+        cmd.Start();
+        var result = await cmd.WaitAndGetResultsAsync();
+
+        result.ExitCode.Should().NotBe(0);
+    }
 }
