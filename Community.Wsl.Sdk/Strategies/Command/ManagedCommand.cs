@@ -222,7 +222,7 @@ public class ManagedCommand : ICommand
             throw new Exception($"Process exit code is non-zero: {_process.ExitCode}");
         }
 
-        var result = new CommandResult();
+        var result = new CommandResult() { ExitCode = _process.ExitCode };
 
         _stdoutReader.Wait();
         _stdoutReader.CopyResultTo(ref result, true);
@@ -247,14 +247,14 @@ public class ManagedCommand : ICommand
 
         _hasWaited = true;
 
-        await WaitForExit(_process!);
+        var exitCode = await WaitForExit(_process!);
 
-        if (_options.FailOnNegativeExitCode && _process!.ExitCode != 0)
+        if (_options.FailOnNegativeExitCode && exitCode != 0)
         {
-            throw new Exception($"Process exit code is non-zero: {_process.ExitCode}");
+            throw new Exception($"Process exit code is non-zero: {exitCode}");
         }
 
-        var result = new CommandResult();
+        var result = new CommandResult() { ExitCode = exitCode, };
 
         await _stdoutReader.WaitAsync();
         _stdoutReader.CopyResultTo(ref result, true);
