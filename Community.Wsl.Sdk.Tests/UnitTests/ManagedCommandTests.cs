@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Castle.Core.Resource;
 using Community.Wsl.Sdk.Strategies.Api;
 using Community.Wsl.Sdk.Strategies.Command;
 using FakeItEasy;
@@ -17,7 +11,7 @@ namespace Community.Wsl.Sdk.Tests.UnitTests
 {
     public class ManagedCommandTests
     {
-        public ManagedCommand CreateCommand(
+        public Command CreateCommand(
             string distroName,
             string command,
             string[] arguments,
@@ -30,7 +24,7 @@ namespace Community.Wsl.Sdk.Tests.UnitTests
             var env = A.Fake<IEnvironment>();
             var pm = A.Fake<IProcessManager>();
 
-            return new ManagedCommand(
+            return new Command(
                 distroName,
                 command,
                 arguments,
@@ -73,7 +67,7 @@ namespace Community.Wsl.Sdk.Tests.UnitTests
                 .Invokes((psi) => actualStartInfo = psi.GetArgument<ProcessStartInfo>(0)!)
                 .Returns(p);
 
-            var cmd = new ManagedCommand(
+            var cmd = new Command(
                 distroName,
                 command,
                 arguments,

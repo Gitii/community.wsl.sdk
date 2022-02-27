@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Community.Wsl.Sdk.Strategies.Api;
 using Community.Wsl.Sdk.Strategies.Command;
-using Community.Wsl.Sdk.Strategies.NativeMethods;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -16,14 +15,14 @@ internal class ManagedCommandTests
     [SetUp]
     public void Setup()
     {
-        IWslApi api = new ComBasedWslApi(new Win32NativeMethods());
+        IWslApi api = new ManagedWslApi();
         _distroName = api.GetDefaultDistro()!.Value.DistroName;
     }
 
     [Test]
     public void Test_expect_stdout_to_equal_constant()
     {
-        var cmd = new ManagedCommand(
+        var cmd = new Command(
             _distroName,
             "echo",
             new string[] { "-n", "test" },
@@ -43,7 +42,7 @@ internal class ManagedCommandTests
     [Test]
     public void Test_expect_stderr_to_equal_constant()
     {
-        var cmd = new ManagedCommand(
+        var cmd = new Command(
             _distroName,
             "echo",
             new string[] { "-n", "test", "1>&2" },
@@ -64,7 +63,7 @@ internal class ManagedCommandTests
     [Test]
     public void Test_expect_stdout_to_equal_stdin()
     {
-        var cmd = new ManagedCommand(
+        var cmd = new Command(
             _distroName,
             "read",
             new string[] { "-n", "4" },
@@ -93,7 +92,7 @@ internal class ManagedCommandTests
     [Test]
     public async Task Test_async_waitAsync()
     {
-        var cmd = new ManagedCommand(
+        var cmd = new Command(
             _distroName,
             "echo",
             new string[] { "-n", "test" },
@@ -113,7 +112,7 @@ internal class ManagedCommandTests
     [Test]
     public void Test_exit_code()
     {
-        var cmd = new ManagedCommand(
+        var cmd = new Command(
             _distroName,
             "this_command_doesnt_exit",
             new[] { "-n", "test" },
@@ -129,7 +128,7 @@ internal class ManagedCommandTests
     [Test]
     public async Task Test_exit_code_asyncAsync()
     {
-        var cmd = new ManagedCommand(
+        var cmd = new Command(
             _distroName,
             "this_command_doesnt_exit",
             new[] { "-n", "test" },

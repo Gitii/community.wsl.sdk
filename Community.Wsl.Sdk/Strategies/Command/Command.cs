@@ -6,7 +6,7 @@ using Community.Wsl.Sdk.Strategies.Api;
 
 namespace Community.Wsl.Sdk.Strategies.Command;
 
-public class ManagedCommand : ICommand
+public class Command : ICommand
 {
     private ProcessStartInfo? _startInfo;
     private IProcess? _process;
@@ -27,7 +27,7 @@ public class ManagedCommand : ICommand
     private IIo _io;
     private IProcessManager _processManager;
 
-    public ManagedCommand(
+    public Command(
         string distroName,
         string command,
         string[] arguments,

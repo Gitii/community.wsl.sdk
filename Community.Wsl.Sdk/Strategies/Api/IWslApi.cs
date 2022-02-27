@@ -11,11 +11,6 @@ namespace Community.Wsl.Sdk.Strategies.Api;
 public interface IWslApi
 {
     /// <summary>
-    /// Call CoInitializeSecurity so that you can call the WSL API.
-    /// </summary>
-    public void InitializeSecurityModel();
-
-    /// <summary>
     /// Checks if the environment you are running in now supports WSL.
     /// </summary>
     public bool IsWslSupported()

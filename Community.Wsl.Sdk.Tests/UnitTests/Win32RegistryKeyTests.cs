@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Community.Wsl.Sdk.Strategies.Api;
 using FluentAssertions;
 using Microsoft.Win32;

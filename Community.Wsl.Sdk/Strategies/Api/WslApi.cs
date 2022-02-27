@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using Community.Wsl.Sdk.Strategies.NativeMethods;
 
 namespace Community.Wsl.Sdk.Strategies.Api;
 
@@ -80,6 +77,13 @@ public class ManagedWslApi : IWslApi
         return true;
     }
 
+        /// <summary>
+        /// <inheritdoc cref="IWslApi.InitializeSecurityModel"/>
+        /// This is a NOOP.
+        /// </summary>
+        public void InitializeSecurityModel()
+        {
+        }
     /// <summary>
     /// <inheritdoc cref="IWslApi.InitializeSecurityModel"/>
     /// This is a NOOP.
@@ -135,6 +139,25 @@ public class ManagedWslApi : IWslApi
         var normalizedPath = _io.GetFullPath(basePath);
         var kernelCommandLine = distroKey.GetValue("KernelCommandLine", String.Empty);
 
+            return new DistroInfo()
+            {
+                DistroId = parsedGuid,
+                DistroName = distroName,
+                BasePath = normalizedPath,
+                KernelCommandLine = kernelCommandLine.Split(
+                    new[] { ' ', '\t' },
+                    StringSplitOptions.RemoveEmptyEntries
+                ),
+                IsDefault =
+                    parsedDefaultGuid.HasValue && parsedDefaultGuid.Value.Equals(parsedGuid),
+                WslVersion = distroKey.GetValue<int>("Version"),
+                DistroFlags = (DistroFlags)distroKey.GetValue<int>("Flags"),
+                DefaultUid = 0,
+                DefaultEnvironmentVariables = Array.Empty<string>()
+            };
+        }
+    }
+}
         return new DistroInfo()
         {
             DistroId = parsedGuid,
