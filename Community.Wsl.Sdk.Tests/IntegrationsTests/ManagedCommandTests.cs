@@ -91,7 +91,7 @@ internal class ManagedCommandTests
     }
 
     [Test]
-    public async Task Test_async_wait()
+    public async Task Test_async_waitAsync()
     {
         var cmd = new ManagedCommand(
             _distroName,
@@ -101,7 +101,7 @@ internal class ManagedCommandTests
         );
 
         cmd.Start();
-        var result = await cmd.WaitAndGetResultsAsync();
+        var result = await cmd.WaitAndGetResultsAsync().ConfigureAwait(false);
 
         result.Stdout.Should().BeEquivalentTo("test");
         result.StdoutData.Should().BeNull();
@@ -127,7 +127,7 @@ internal class ManagedCommandTests
     }
 
     [Test]
-    public async Task Test_exit_code_async()
+    public async Task Test_exit_code_asyncAsync()
     {
         var cmd = new ManagedCommand(
             _distroName,
@@ -137,7 +137,7 @@ internal class ManagedCommandTests
         );
 
         cmd.Start();
-        var result = await cmd.WaitAndGetResultsAsync();
+        var result = await cmd.WaitAndGetResultsAsync().ConfigureAwait(false);
 
         result.ExitCode.Should().NotBe(0);
     }

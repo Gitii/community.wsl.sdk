@@ -3,78 +3,77 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Community.Wsl.Sdk.Strategies.Command
+namespace Community.Wsl.Sdk.Strategies.Command;
+
+internal class StreamStringReader : IStreamReader
 {
-    internal class StreamStringReader : IStreamReader
+    private StreamReader _reader;
+    private Thread? _thread;
+    private string? _data;
+    private TaskCompletionSource<string>? _completionSource;
+
+    public StreamStringReader(StreamReader reader)
     {
-        private StreamReader _reader;
-        private Thread? _thread;
-        private string? _data;
-        private TaskCompletionSource<string>? _completionSource;
+        _reader = reader;
+    }
 
-        public StreamStringReader(StreamReader reader)
+    public string? Data => _data;
+
+    private void Finished(string data)
+    {
+        _data = data;
+        _completionSource?.SetResult(data);
+    }
+
+    public void Fetch()
+    {
+        if (_thread != null)
         {
-            _reader = reader;
+            throw new ArgumentException("Already started fetching!");
         }
 
-        public string? Data => _data;
+        _completionSource = new TaskCompletionSource<string>();
 
-        private void Finished(string data)
-        {
-            _data = data;
-            _completionSource?.SetResult(data);
-        }
-
-        public void Fetch()
-        {
-            if (_thread != null)
+        _thread = new Thread(
+            () =>
             {
-                throw new ArgumentException("Already started fetching!");
+                var content = _reader.ReadToEnd();
+                Finished(content);
             }
+        );
 
-            _completionSource = new TaskCompletionSource<string>();
+        _thread.Start();
+    }
 
-            _thread = new Thread(
-                () =>
-                {
-                    var content = _reader.ReadToEnd();
-                    Finished(content);
-                }
-            );
-
-            _thread.Start();
-        }
-
-        public void CopyResultTo(ref CommandResult result, bool isStdOut)
+    public void CopyResultTo(ref CommandResult result, bool isStdOut)
+    {
+        if (_thread == null)
         {
-            if (_thread == null)
-            {
-                throw new ArgumentException("Data hasn't been fetched, yet!");
-            }
-
-            if (_thread.ThreadState != ThreadState.Stopped)
-            {
-                throw new ArgumentException("Fetching hasn't been finished, yet!");
-            }
-
-            if (isStdOut)
-            {
-                result = result with { StdoutData = null, Stdout = Data };
-            }
-            else
-            {
-                result = result with { StderrData = null, Stderr = Data };
-            }
+            throw new ArgumentException("Data hasn't been fetched, yet!");
         }
 
-        public void Wait()
+        if (_thread.ThreadState != ThreadState.Stopped)
         {
-            _thread?.Join();
+            throw new ArgumentException("Fetching hasn't been finished, yet!");
         }
 
-        public async Task WaitAsync()
+        if (isStdOut)
         {
-            await (_completionSource?.Task ?? Task.FromResult(String.Empty));
+            result = result with { StdoutData = null, Stdout = Data };
         }
+        else
+        {
+            result = result with { StderrData = null, Stderr = Data };
+        }
+    }
+
+    public void Wait()
+    {
+        _thread?.Join();
+    }
+
+    public Task WaitAsync()
+    {
+        return _completionSource?.Task ?? Task.FromResult(String.Empty);
     }
 }
