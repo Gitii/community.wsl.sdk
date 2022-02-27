@@ -7,7 +7,7 @@ namespace Community.Wsl.Sdk.Strategies.Commands;
 
 internal class StreamDataReader : IStreamReader
 {
-    private StreamReader _reader;
+    protected readonly StreamReader _reader;
     private Thread? _thread;
     private byte[]? _data;
     private TaskCompletionSource<byte[]>? _completionSource;
@@ -19,7 +19,7 @@ internal class StreamDataReader : IStreamReader
 
     public byte[]? Data => _data;
 
-    private void Finished(byte[] data)
+    protected virtual void Finished(byte[] data)
     {
         _data = data;
         _completionSource?.SetResult(data);
@@ -45,12 +45,15 @@ internal class StreamDataReader : IStreamReader
                 var data = stream.ToArray();
                 Finished(data);
             }
-        );
+        )
+        {
+            IsBackground = true
+        };
 
         _thread.Start();
     }
 
-    public void CopyResultTo(ref CommandResult result, bool isStdOut)
+    public virtual void CopyResultTo(ref CommandResult result, bool isStdOut)
     {
         if (_thread == null)
         {

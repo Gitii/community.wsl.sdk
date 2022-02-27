@@ -4,7 +4,7 @@ using Community.Wsl.Sdk.Strategies.Api;
 namespace Community.Wsl.Sdk;
 
 /// <summary>
-/// A model class that contains information.
+/// A POD class that contains information about a wsl distribution.
 /// </summary>
 public readonly struct DistroInfo
 {
@@ -43,10 +43,10 @@ public readonly struct DistroInfo
     /// </summary>
     public int DefaultUid { get; init; }
 
-        /// <summary>
-        /// Represents the default settings of the distribution.
-        /// </summary>
-        public DistroFlags DistroFlags { get; init; }
+    /// <summary>
+    /// Represents the default settings of the distribution.
+    /// </summary>
+    public DistroFlags DistroFlags { get; init; }
 
     /// <summary>
     /// Determine which version of the WSL runtime is configured to use.

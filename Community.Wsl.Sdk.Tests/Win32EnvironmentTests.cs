@@ -3,7 +3,7 @@ using Community.Wsl.Sdk.Strategies.Api;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Community.Wsl.Sdk.Tests.UnitTests
+namespace Community.Wsl.Sdk.Tests
 {
     public class Win32EnvironmentTests
     {

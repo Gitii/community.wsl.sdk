@@ -5,7 +5,7 @@ using FluentAssertions;
 using Microsoft.Win32;
 using NUnit.Framework;
 
-namespace Community.Wsl.Sdk.Tests.UnitTests
+namespace Community.Wsl.Sdk.Tests
 {
     /// <summary>
     /// NOTE: Actually these are integration tests because they rely on the actual windows registry.

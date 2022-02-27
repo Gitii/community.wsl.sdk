@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
-
-#if NETSTANDARD2_1_OR_GREATER
+﻿#if NETSTANDARD2_1_OR_GREATER
 // ReSharper disable once CheckNamespace
 namespace System.Runtime.CompilerServices;
+
+using System.ComponentModel;
 
 /// <summary>
 /// Reserved to be used by the compiler for tracking metadata.
