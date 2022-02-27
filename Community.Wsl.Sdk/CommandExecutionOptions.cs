@@ -7,9 +7,14 @@ public struct CommandExecutionOptions
     public CommandExecutionOptions()
     {
         FailOnNegativeExitCode = true;
+
         StdoutDataProcessingMode = DataProcessingMode.Drop;
         StdErrDataProcessingMode = DataProcessingMode.Drop;
         StdInDataProcessingMode = DataProcessingMode.Drop;
+
+        StdoutEncoding = null;
+        StderrEncoding = null;
+        StdinEncoding = null;
     }
 
     public bool FailOnNegativeExitCode { get; set; } = true;
