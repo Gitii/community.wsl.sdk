@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Community.Wsl.Sdk.Strategies.Api;
 
-namespace Community.Wsl.Sdk.Strategies.Command;
+namespace Community.Wsl.Sdk.Strategies.Commands;
 
 public class Command : ICommand
 {

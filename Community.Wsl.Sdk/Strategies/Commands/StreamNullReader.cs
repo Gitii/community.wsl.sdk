@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Community.Wsl.Sdk.Strategies.Command;
+namespace Community.Wsl.Sdk.Strategies.Commands;
 
 internal class StreamNullReader : IStreamReader
 {

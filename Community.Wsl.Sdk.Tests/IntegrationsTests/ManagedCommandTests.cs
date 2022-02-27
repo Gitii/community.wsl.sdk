@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Community.Wsl.Sdk.Strategies.Api;
-using Community.Wsl.Sdk.Strategies.Command;
+using Community.Wsl.Sdk.Strategies.Commands;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -15,7 +15,7 @@ internal class ManagedCommandTests
     [SetUp]
     public void Setup()
     {
-        IWslApi api = new ManagedWslApi();
+        IWslApi api = new WslApi();
         _distroName = api.GetDefaultDistro()!.Value.DistroName;
     }
 

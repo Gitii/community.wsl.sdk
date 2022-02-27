@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Community.Wsl.Sdk.Strategies.Command;
+namespace Community.Wsl.Sdk.Strategies.Commands;
 
 /// <summary>
 /// Encapsulates the io stream of a <see cref="ICommand"/>.

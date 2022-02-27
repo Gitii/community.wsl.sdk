@@ -1,6 +1,6 @@
 # Community SDK for Windows Subsystem for Linux
 
-> :exclamation: **Fork**: This repository is based on the awsome work of https://github.com/wslhub/wsl-sdk-dotnet/tree/main/src/Wslhub.Sdk
+> :exclamation: **Fork**: This repository is based on the awsome work of [wslhub/wsl-sdk-dotnet](https://github.com/wslhub/wsl-sdk-dotnet)
 
 This project contains a WSL API wrapper for Windows developers who wants to integrate WSL 
 features into existing Windows applications. You can enumerate, query, executing WSL commands via C# classes.
@@ -22,7 +22,7 @@ There are one default implementations of `IWslApi`.
 
 It uses the `wsl.exe` executable and (mostly) public information stored in the registry.
 
-> :exclamation: Com-Api: WSL has a com-based api that **could** also used. Using com-apis has several disadvantages including security related issues. Using the managed  alternative with `wsl.exe` has proben to be more versatile and easier to use.
+> :exclamation: Com-Api: WSL has a com-based api that **could** also used instead. Using com-apis has several disadvantages including security related issues. Using the managed alternative with `wsl.exe` has proven to be more versatile and easier to use.
 
 ## How to install
 
@@ -103,7 +103,7 @@ You can also mock specific parts of the implementation by passing custom impleme
 
 ```csharp
 /*
-Signature of constructor:
+Signature of the constructor:
 public WslApi(
     IRegistry? registry = null,
     IIo? io = null,
@@ -116,3 +116,21 @@ var api = new WslApi(
     io: A.Fake<IIo>()
 );
 ```
+
+# Migrate from v1 to v2
+
+Breaking changes:
+
+* `ComBasedWslApi` has been removed
+
+* `ComCommand` has been removed
+
+* `ManagedWslApi` has been renamed to `WslApi`
+
+* `ManagedCommand` has been remamed to `Command`
+
+* Changed namespace `Community.Wsl.Sdk.Strategies.Command` to `Community.Wsl.Sdk.Strategies.Commands`
+
+
+
+Please use the managed api (`Managed{WslApi,Command}`). It has the same features and is easier to use.
