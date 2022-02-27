@@ -4,6 +4,14 @@ namespace Community.Wsl.Sdk;
 
 public struct CommandExecutionOptions
 {
+    public CommandExecutionOptions()
+    {
+        FailOnNegativeExitCode = true;
+        StdoutDataProcessingMode = DataProcessingMode.Drop;
+        StdErrDataProcessingMode = DataProcessingMode.Drop;
+        StdInDataProcessingMode = DataProcessingMode.Drop;
+    }
+
     public bool FailOnNegativeExitCode { get; set; } = true;
 
     public DataProcessingMode StdoutDataProcessingMode { get; set; } = DataProcessingMode.Drop;
