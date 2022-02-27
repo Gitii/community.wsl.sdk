@@ -82,6 +82,11 @@ internal class StreamDataReader : IStreamReader
 
     public Task WaitAsync()
     {
-        return _completionSource?.Task ?? Task.FromResult(Array.Empty<byte>());
+        if (_completionSource == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        return _completionSource.Task.ContinueWith(task => Task.Delay(1));
     }
 }

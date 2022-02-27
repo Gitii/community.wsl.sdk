@@ -52,7 +52,7 @@ public class StreamDataReaderTests
         var snr = new StreamDataReader(reader);
 
         snr.Fetch();
-        await snr.WaitAsync().ConfigureAwait(true);
+        await snr.WaitAsync().ConfigureAwait(false);
 
         CommandResult r = new CommandResult();
 
