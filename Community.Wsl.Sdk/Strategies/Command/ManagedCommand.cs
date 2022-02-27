@@ -80,8 +80,43 @@ public class ManagedCommand : ICommand
             throw new ArgumentException("Command has already been started!");
         }
 
+        bool redirectStandardInput = _options.StdInDataProcessingMode != DataProcessingMode.Drop;
+        bool redirectStandardOutput = _options.StdoutDataProcessingMode != DataProcessingMode.Drop;
+        bool redirectStandardError = _options.StdErrDataProcessingMode != DataProcessingMode.Drop;
+
         _isStarted = true;
 
+        CreateStartInfo(redirectStandardInput, redirectStandardOutput, redirectStandardError);
+
+        var process =
+            _processManager.Start(_startInfo) ?? throw new Exception("Cannot start wsl process.");
+
+        _process = process;
+
+        CreateReader(
+            () => _process.StandardOutput,
+            ref _stdoutReader,
+            _options.StdoutDataProcessingMode
+        );
+        CreateReader(
+            () => _process.StandardError,
+            ref _stderrReader,
+            _options.StdErrDataProcessingMode
+        );
+
+        _stdoutReader.Fetch();
+        _stderrReader.Fetch();
+
+        return new CommandStreams()
+        {
+            StandardInput = redirectStandardInput ? process.StandardInput : StreamWriter.Null,
+            StandardOutput = redirectStandardOutput ? process.StandardOutput : StreamReader.Null,
+            StandardError = redirectStandardError ? process.StandardError : StreamReader.Null
+        };
+    }
+
+    private void CreateStartInfo(bool redirectStandardInput, bool redirectStandardOutput, bool redirectStandardError)
+    {
         var wslPath = _io.Combine(
             _environment.GetFolderPath(Environment.SpecialFolder.System),
             "wsl.exe"
@@ -121,10 +156,6 @@ public class ManagedCommand : ICommand
             _startInfo.ArgumentList.Add(argument);
         }
 
-        bool redirectStandardInput = _options.StdInDataProcessingMode != DataProcessingMode.Drop;
-        bool redirectStandardOutput = _options.StdoutDataProcessingMode != DataProcessingMode.Drop;
-        bool redirectStandardError = _options.StdErrDataProcessingMode != DataProcessingMode.Drop;
-
         _startInfo.CreateNoWindow = true;
         _startInfo.RedirectStandardInput = redirectStandardInput;
         _startInfo.RedirectStandardOutput = redirectStandardOutput;
@@ -144,32 +175,6 @@ public class ManagedCommand : ICommand
         {
             _startInfo.StandardInputEncoding = _options.StdinEncoding ?? Console.InputEncoding;
         }
-
-        var process =
-            _processManager.Start(_startInfo) ?? throw new Exception("Cannot start wsl process.");
-
-        _process = process;
-
-        CreateReader(
-            () => _process.StandardOutput,
-            ref _stdoutReader,
-            _options.StdoutDataProcessingMode
-        );
-        CreateReader(
-            () => _process.StandardError,
-            ref _stderrReader,
-            _options.StdErrDataProcessingMode
-        );
-
-        _stdoutReader.Fetch();
-        _stderrReader.Fetch();
-
-        return new CommandStreams()
-        {
-            StandardInput = redirectStandardInput ? process.StandardInput : StreamWriter.Null,
-            StandardOutput = redirectStandardOutput ? process.StandardOutput : StreamReader.Null,
-            StandardError = redirectStandardError ? process.StandardError : StreamReader.Null
-        };
     }
 
     private void CreateReader(
@@ -247,7 +252,7 @@ public class ManagedCommand : ICommand
 
         _hasWaited = true;
 
-        var exitCode = await WaitForExit(_process!);
+        var exitCode = await WaitForExitAsync(_process!).ConfigureAwait(false);
 
         if (_options.FailOnNegativeExitCode && exitCode != 0)
         {
@@ -256,10 +261,10 @@ public class ManagedCommand : ICommand
 
         var result = new CommandResult() { ExitCode = exitCode, };
 
-        await _stdoutReader.WaitAsync();
+        await _stdoutReader.WaitAsync().ConfigureAwait(false);
         _stdoutReader.CopyResultTo(ref result, true);
 
-        await _stderrReader.WaitAsync();
+        await _stderrReader.WaitAsync().ConfigureAwait(false);
         _stderrReader.CopyResultTo(ref result, false);
 
         return result;
@@ -277,7 +282,7 @@ public class ManagedCommand : ICommand
         return WaitAndGetResultsAsync();
     }
 
-    private Task<int> WaitForExit(IProcess process)
+    private Task<int> WaitForExitAsync(IProcess process)
     {
         if (process.HasExited)
         {

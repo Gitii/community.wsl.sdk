@@ -1,7 +1,6 @@
-﻿namespace Community.Wsl.Sdk.Strategies.Api
+﻿namespace Community.Wsl.Sdk.Strategies.Api;
+
+public interface IRegistry
 {
-    public interface IRegistry
-    {
-        IRegistryKey GetCurrentUser();
-    }
+    IRegistryKey GetCurrentUser();
 }
