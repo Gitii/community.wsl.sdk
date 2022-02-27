@@ -1,5 +1,5 @@
 ﻿using System;
-using Community.Wsl.Sdk.Strategies.NativeMethods;
+using Community.Wsl.Sdk.Strategies.Api;
 
 namespace Community.Wsl.Sdk;
 
@@ -43,10 +43,10 @@ public readonly struct DistroInfo
     /// </summary>
     public int DefaultUid { get; init; }
 
-    /// <summary>
-    /// Represents the default settings of the distribution.
-    /// </summary>
-    public BaseNativeMethods.DistroFlags DistroFlags { get; init; }
+        /// <summary>
+        /// Represents the default settings of the distribution.
+        /// </summary>
+        public DistroFlags DistroFlags { get; init; }
 
     /// <summary>
     /// Determine which version of the WSL runtime is configured to use.

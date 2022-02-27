@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using Community.Wsl.Sdk.Strategies.NativeMethods;
 
 namespace Community.Wsl.Sdk.Strategies.Api;
 
 /// <summary>
 /// <inheritdoc cref="IWslApi"/>
 /// </summary>
-public class ManagedWslApi : IWslApi
+public class WslApi : IWslApi
 {
     private readonly IIo _io;
     private readonly IEnvironment _environment;
@@ -20,11 +17,7 @@ public class ManagedWslApi : IWslApi
     /// <summary>
     /// <inheritdoc cref="IWslApi"/>
     /// </summary>
-    public ManagedWslApi(
-        IRegistry? registry = null,
-        IIo? io = null,
-        IEnvironment? environment = null
-    )
+    public WslApi(IRegistry? registry = null, IIo? io = null, IEnvironment? environment = null)
     {
         _registry = registry ?? new Win32Registry();
         _io = io ?? new Win32IO();
@@ -81,12 +74,6 @@ public class ManagedWslApi : IWslApi
     }
 
     /// <summary>
-    /// <inheritdoc cref="IWslApi.InitializeSecurityModel"/>
-    /// This is a NOOP.
-    /// </summary>
-    public void InitializeSecurityModel() { }
-
-    /// <summary>
     /// <inheritdoc cref="IWslApi.GetDistroList"/>
     /// </summary>
     public IReadOnlyList<DistroInfo> GetDistroList()
@@ -97,13 +84,7 @@ public class ManagedWslApi : IWslApi
         }
 
         var currentUser = _registry.GetCurrentUser();
-        var lxssPath = Path.Combine(
-            "SOFTWARE",
-            "Microsoft",
-            "Windows",
-            "CurrentVersion",
-            "Lxss"
-        );
+        var lxssPath = Path.Combine("SOFTWARE", "Microsoft", "Windows", "CurrentVersion", "Lxss");
 
         using var lxssKey = currentUser.OpenSubKey(lxssPath);
         var defaultGuid = lxssKey.GetValue<Guid>("DefaultDistribution");
@@ -144,10 +125,9 @@ public class ManagedWslApi : IWslApi
                 new[] { ' ', '\t' },
                 StringSplitOptions.RemoveEmptyEntries
             ),
-            IsDefault =
-                parsedDefaultGuid.HasValue && parsedDefaultGuid.Value.Equals(parsedGuid),
+            IsDefault = parsedDefaultGuid.HasValue && parsedDefaultGuid.Value.Equals(parsedGuid),
             WslVersion = distroKey.GetValue<int>("Version"),
-            DistroFlags = (BaseNativeMethods.DistroFlags)distroKey.GetValue<int>("Flags"),
+            DistroFlags = (DistroFlags)distroKey.GetValue<int>("Flags"),
             DefaultUid = 0,
             DefaultEnvironmentVariables = Array.Empty<string>()
         };

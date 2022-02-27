@@ -1,6 +1,6 @@
 # Community SDK for Windows Subsystem for Linux
 
-> :exclamation: **Fork**: This repository is based on the awsome work of https://github.com/wslhub/wsl-sdk-dotnet/tree/main/src/Wslhub.Sdk
+> :exclamation: **Fork**: This repository is based on the awsome work of [wslhub/wsl-sdk-dotnet](https://github.com/wslhub/wsl-sdk-dotnet)
 
 This project contains a WSL API wrapper for Windows developers who wants to integrate WSL 
 features into existing Windows applications. You can enumerate, query, executing WSL commands via C# classes.
@@ -18,16 +18,16 @@ features into existing Windows applications. You can enumerate, query, executing
 
 ## How to use
 
-There are two different implementations of `IWslApi`:
-- A COM-based one that has specific requirements and requires special setup, too
-- An alternative implementation that uses `wsl.exe` and (mostly) public information stored in the registry.
+There are one default implementations of `IWslApi`.
 
-It's recommended to use the alternative because it's more versatile and easier to use.
+It uses the `wsl.exe` executable and (mostly) public information stored in the registry.
+
+> :exclamation: Com-Api: WSL has a com-based api that **could** also used instead. Using com-apis has several disadvantages including security related issues. Using the managed alternative with `wsl.exe` has proven to be more versatile and easier to use.
 
 ## How to install
 
-This package is available on `nuget.org`: https://www.nuget.org/packages/Community.Wsl.Sdk  
-You can add a reference using `dotnet / nuget`:
+This package is available on [nuget.org](https://www.nuget.org/packages/Community.Wsl.Sdk).  
+You can add a reference using `dotnet`:
 
 ```shell
 dotnet add package Community.Wsl.Sdk
@@ -37,19 +37,10 @@ dotnet add package Community.Wsl.Sdk
 
 ### WSL Api
 
-| Classes            | Description                                       | 
-| ------------------ | ------------------------------------------------- |
-| `ManagedWslApi`    | Get list of installed linux distributions.        | 
-| `ManagedCommand`   | Execute command in specified linux distribution.  |
-| `ComCommand`       | Get list of installed linux distributions.        |
-| `ComBasedWslApi`   | Execute command in specified linux distribution.  |
-
-### WSL command execution
-
-There are two implementations, one uses the com based api to execute, the other calls `wsl.exe` internally.
-The com based implementation has proven to be quite limited and buggy.
-
-All implementations implement `ICommand`. Feel free to use your favorite DI or mocking framework to help with testing.
+| Class     | Description                                      |
+| --------- | ------------------------------------------------ |
+| `WslApi`  | Get list of installed linux distributions.       |
+| `Command` | Execute command in specified linux distribution. |
 
 ## Code Example
 
@@ -59,11 +50,7 @@ All implementations implement `ICommand`. Feel free to use your favorite DI or m
 using Community.Wsl.Sdk.Strategies.Api;
 
 // Create instance
-var api = new ManagedWslApi();
-
-// When class ComBasedWslApi is used
-// Place the code Wsl.InitializeSecurityModel() at the top of your application's Main() method.
-// api.InitializeSecurity();
+var api = new WslApi();
 
 // Check if wsl is supported
 bool isSupported = api.IsWslSupported();
@@ -85,56 +72,65 @@ var defaultDistro = api.GetDefaultDistro();
 using Community.Wsl.Sdk.Strategies.Api;
 
 // Setup
-var api = new ManagedWslApi();
+var api = new WslApi();
 
 var distroName = api.GetDefaultDistro()!.Value.DistroName;
 
 // Get command result 
-var cmd = new ManagedCommand(
+var cmd = new Command(
     distroName,
     "echo",
     new string[] { "-n", "test" },
     new CommandExecutionOptions() { StdoutDataProcessingMode = DataProcessingMode.String }
 );
-
-cmd.Start(); 
-
-// Wait for the command to finish. Execution is executed asynchronically!
-// WaitAndGetResults will fetch the data if instructed or drop it.
-var result = cmd.WaitAndGetResults();
+// execute the command and wait for the result (blocks current thread)
+var result = cmd.StartAndGetResults();
+// OR start and wait asynchronously
+// var result = await cmd.StartAndGetResultsAsync();
 
 // result.Stdout is "test"
 ```
 
-# How to use com-based `IWslApi` (not recommended)
+# Unit tests and Mocks
 
-You will need the below items to use the WSL APIs.
-
-- Add an application manifest which describes your application is compatible with the 
-  Windows 10 (GUID: `8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a`) and the `requestedExecutionLevel` tag with `asInvoker` level.
-- Create instance of `ComBasedWslApi`
-- Call `InitializeSecurityModel()` at the top of your application's `Main()` method.
-
-#### Limitations
-
-Due to the limitation of COM security model requirements of WSL APIs, 
-you can not run this SDK within the Visual Studio Test Explorer or LINQPAD.
-
-To circumvent this technical limitation, instruct `ComBasedWslApi` to use a different set of native methods:
-
-```csharp
-bool isTestEnv = ...;
-
-// decide on implementation at run time
-BaseNativeMethods nativeMethods = isTestEnv ? new StubNativeMethods() : new Win32NativeMethods();
-
-// use first parameter of constructor to change the behaviour
-var api = new ComBasedWslApi(nativeMethods);
-```
-
-Yet another approach is to use a different implementation of `IWslApi` altogether.
-If you already use mocking frameworks & DI, use them to create a `test friedly` class, for example using `FakeItEasy`:
+Both `WslApi` and `Command` implement interfaces, namely `IWslApi` and `ICommand`. If you already use mocking frameworks & DI, use them to create a `test friedly` class, for example using `FakeItEasy`:
 
 ```
 var api = A.Fake<IWslApi>();
 ```
+
+You can also mock specific parts of the implementation by passing custom implementations in the constructor:
+
+```csharp
+/*
+Signature of the constructor:
+public WslApi(
+    IRegistry? registry = null,
+    IIo? io = null,
+    IEnvironment? environment = null
+)
+*/
+
+// mock only the IIo logic
+var api = new WslApi(
+    io: A.Fake<IIo>()
+);
+```
+
+# Migrate from v1 to v2
+
+Breaking changes:
+
+* `ComBasedWslApi` has been removed
+
+* `ComCommand` has been removed
+
+* `ManagedWslApi` has been renamed to `WslApi`
+
+* `ManagedCommand` has been remamed to `Command`
+
+* Changed namespace `Community.Wsl.Sdk.Strategies.Command` to `Community.Wsl.Sdk.Strategies.Commands`
+
+
+
+Please use the managed api (`Managed{WslApi,Command}`). It has the same features and is easier to use.

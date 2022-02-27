@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Community.Wsl.Sdk.Strategies.Command;
+namespace Community.Wsl.Sdk.Strategies.Commands;
 
 public interface ICommand : IDisposable
 {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Community.Wsl.Sdk.Strategies.Command;
+namespace Community.Wsl.Sdk.Strategies.Commands;
 
 internal class StreamStringReader : IStreamReader
 {
