@@ -52,9 +52,16 @@ public class Command : ICommand
         _stderrReader = new StreamNullReader();
         _stdoutReader = new StreamNullReader();
 
-        if (options.StdInDataProcessingMode is DataProcessingMode.Binary or DataProcessingMode.String)
+        if (
+            options.StdInDataProcessingMode
+            is DataProcessingMode.Binary
+            or DataProcessingMode.String
+        )
         {
-            throw new ArgumentException("StandardInput can only be dropped or external.", nameof(options));
+            throw new ArgumentException(
+                "StandardInput can only be dropped or external.",
+                nameof(options)
+            );
         }
     }
 
@@ -84,7 +91,7 @@ public class Command : ICommand
     {
         if (IsStarted)
         {
-            throw new ArgumentException("Command has already been started!");
+            throw new Exception("Command has already been started!");
         }
 
         bool redirectStandardInput = _options.StdInDataProcessingMode != DataProcessingMode.Drop;
@@ -130,7 +137,7 @@ public class Command : ICommand
     {
         if (!IsStarted)
         {
-            throw new ArgumentException("Command hasn't been started, yet!");
+            throw new Exception("Command hasn't been started, yet!");
         }
 
         if (HasWaited)
@@ -162,7 +169,7 @@ public class Command : ICommand
     {
         if (!IsStarted)
         {
-            throw new ArgumentException("Command hasn't been started, yet!");
+            throw new Exception("Command hasn't been started, yet!");
         }
 
         if (HasWaited)
@@ -308,7 +315,7 @@ public class Command : ICommand
 
         return tcs.Task;
 
-        void HasExited(object _, EventArgs __)
+        void HasExited(object? _, EventArgs __)
         {
             tcs.SetResult(process.ExitCode);
 

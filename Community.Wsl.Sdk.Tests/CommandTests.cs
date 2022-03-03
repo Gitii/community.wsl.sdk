@@ -53,8 +53,13 @@ public class CommandTests
     [TestCase(DataProcessingMode.String)]
     public void Constructor_ShouldFailWhenOptionsAreInvalid(DataProcessingMode mode)
     {
-        var call = () => CreateCommand("dn", "", Array.Empty<string>(),
-            new CommandExecutionOptions() { StdInDataProcessingMode = mode, });
+        var call = () =>
+            CreateCommand(
+                "dn",
+                "",
+                Array.Empty<string>(),
+                new CommandExecutionOptions() { StdInDataProcessingMode = mode, }
+            );
 
         call.Should().Throw<ArgumentException>("StandardInput can only be dropped or external.");
     }
@@ -137,7 +142,6 @@ public class CommandTests
 
         var p = A.Fake<IProcess>();
         A.CallTo(() => p.StandardOutput).Returns(new StreamReader(Stream.Null));
-
 
         ProcessStartInfo actualStartInfo = new ProcessStartInfo();
         A.CallTo(() => pm.Start(A<ProcessStartInfo>._))
@@ -277,6 +281,6 @@ public class CommandTests
 
         cmd.IsStarted.Should().BeTrue();
 
-        call.Should().Throw<ArgumentException>("Command has already been started!");
+        call.Should().Throw<Exception>("Command has already been started!");
     }
 }

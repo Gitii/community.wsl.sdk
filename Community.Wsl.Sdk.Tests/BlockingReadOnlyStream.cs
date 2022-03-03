@@ -23,12 +23,12 @@ public class BlockingReadOnlyStream : Stream
 
     public override void SetLength(long value)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public override void Write(byte[] buffer, int offset, int count)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public override bool CanRead { get; } = true;
