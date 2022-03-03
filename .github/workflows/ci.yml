@@ -7,26 +7,42 @@ on:
     - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: windows-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: | 
-          3.1.x
           5.0.x
           6.0.x
     - name: Decode the Pfx
-      run: echo "${{ secrets.SIGNING_KEY }}" | base64 -d > ./sgKey.snk
+      run: |
+        $signing_keys_payload = [System.Convert]::FromBase64String("${{ secrets.SIGNING_KEY }}")
+        $currentDirectory = Get-Location
+        $certificatePath = Join-Path -Path $currentDirectory -ChildPath "sgKey.snk"
+        [IO.File]::WriteAllBytes("$certificatePath", $signing_keys_payload)
+        if (-! $?) { exit 1 } else { exit $LastExitCode }
     - name: Build
       run: dotnet build --configuration Release
     - name: Test
-      run: dotnet test --configuration Release --no-build
+      run: dotnet test --configuration Release --no-build --filter TestCategory!=Integration
     - name: Generate coverage
-      run: ./generate-coverage.sh
+      run: ./generate-coverage.cmd
+    - name: Upload code coverage results
+      uses: actions/upload-artifact@v2
+      with:
+        name: code-coverage-report
+        path: CoverageResults
+
+  verify:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Download code coverage resilts
+      uses: actions/download-artifact@v2
+      with:
+        name: CoverageResults
     - name: Code Coverage Summary Report
       uses: irongut/CodeCoverageSummary@v1.2.0
       with:
@@ -39,7 +55,6 @@ jobs:
         indicators: true
         output: both
         thresholds: '100 100'
-
     - name: Add Coverage PR Comment
       uses: marocchino/sticky-pull-request-comment@v2
       if: github.event_name == 'pull_request'
