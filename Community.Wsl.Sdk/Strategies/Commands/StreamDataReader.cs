@@ -29,7 +29,7 @@ internal class StreamDataReader : IStreamReader
     {
         if (_thread != null)
         {
-            throw new ArgumentException("Already started fetching!");
+            throw new Exception("Already started fetching!");
         }
 
         _completionSource = new TaskCompletionSource<byte[]>();
@@ -45,10 +45,7 @@ internal class StreamDataReader : IStreamReader
                 var data = stream.ToArray();
                 Finished(data);
             }
-        )
-        {
-            IsBackground = true
-        };
+        ) { IsBackground = true };
 
         _thread.Start();
     }
@@ -57,12 +54,12 @@ internal class StreamDataReader : IStreamReader
     {
         if (_thread == null)
         {
-            throw new ArgumentException("Data hasn't been fetched, yet!");
+            throw new Exception("Data hasn't been fetched, yet!");
         }
 
         if (_thread.ThreadState != ThreadState.Stopped)
         {
-            throw new ArgumentException("Fetching hasn't been finished, yet!");
+            throw new Exception("Fetching hasn't been finished, yet!");
         }
 
         if (isStdOut)
@@ -87,6 +84,6 @@ internal class StreamDataReader : IStreamReader
             return Task.CompletedTask;
         }
 
-        return _completionSource.Task.ContinueWith(task => Task.Delay(1));
+        return _completionSource.Task.ContinueWith(task => Task.Delay(1), TaskScheduler.Default);
     }
 }

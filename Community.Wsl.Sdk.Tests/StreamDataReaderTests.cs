@@ -84,7 +84,7 @@ public class StreamDataReaderTests
 
         var call = () => srn.Fetch();
 
-        call.Should().Throw<ArgumentException>("Already started fetching!");
+        call.Should().Throw<Exception>("Already started fetching!");
     }
 
     [Test]
@@ -95,7 +95,7 @@ public class StreamDataReaderTests
         CommandResult _ = new CommandResult();
         var call = () => srn.CopyResultTo(ref _, false);
 
-        call.Should().Throw<ArgumentException>("Data hasn't been fetched, yet!");
+        call.Should().Throw<Exception>("Data hasn't been fetched, yet!");
     }
 
     [Test]
@@ -108,6 +108,6 @@ public class StreamDataReaderTests
         CommandResult _ = new CommandResult();
         var call = () => srn.CopyResultTo(ref _, false);
 
-        call.Should().Throw<ArgumentException>("Fetching hasn't been finished, yet!");
+        call.Should().Throw<Exception>("Fetching hasn't been finished, yet!");
     }
 }
