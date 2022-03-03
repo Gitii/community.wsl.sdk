@@ -7,7 +7,7 @@ on:
     - main
 
 jobs:
-  build:
+  test:
     runs-on: windows-latest
     steps:
     - name: Checkout
@@ -30,3 +30,40 @@ jobs:
       run: dotnet build --configuration Release
     - name: Test
       run: dotnet test --configuration Release --no-build --filter TestCategory!=Integration
+    - name: Generate coverage
+      run: ./generate-coverage.cmd
+    - name: Upload code coverage results
+      uses: actions/upload-artifact@v2
+      with:
+        name: code-coverage-report
+        path: CoverageResults
+
+  verify:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Download code coverage resilts
+      uses: actions/download-artifact@v2
+      with:
+        name: code-coverage-report
+        path: CoverageResults
+    - name: Code Coverage Summary Report
+      uses: irongut/CodeCoverageSummary@v1.2.0
+      with:
+        filename: CoverageResults/coverage.cobertura.xml
+        badge: true
+        fail_below_min: true
+        format: markdown
+        hide_branch_rate: false
+        hide_complexity: true
+        indicators: true
+        output: both
+        thresholds: '53 44'
+    - name: Add Coverage PR Comment
+      uses: marocchino/sticky-pull-request-comment@v2
+      if: github.event_name == 'pull_request'
+      with:
+        recreate: true
+        path: code-coverage-results.md

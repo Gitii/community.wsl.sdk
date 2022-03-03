@@ -1,61 +1,24 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Community.Wsl.Sdk.Strategies.Commands;
 
-internal class StreamStringReader : IStreamReader
+internal class StreamStringReader : StreamDataReader
 {
-    private StreamReader _reader;
-    private Thread? _thread;
     private string? _data;
-    private TaskCompletionSource<string>? _completionSource;
 
-    public StreamStringReader(StreamReader reader)
+    public StreamStringReader(StreamReader reader) : base(reader) { }
+
+    public new string? Data => _data;
+
+    protected override void Finished(byte[] data)
     {
-        _reader = reader;
+        _data = _reader.CurrentEncoding.GetString(data);
+        base.Finished(data);
     }
 
-    public string? Data => _data;
-
-    private void Finished(string data)
+    public override void CopyResultTo(ref CommandResult result, bool isStdOut)
     {
-        _data = data;
-        _completionSource?.SetResult(data);
-    }
-
-    public void Fetch()
-    {
-        if (_thread != null)
-        {
-            throw new ArgumentException("Already started fetching!");
-        }
-
-        _completionSource = new TaskCompletionSource<string>();
-
-        _thread = new Thread(
-            () =>
-            {
-                var content = _reader.ReadToEnd();
-                Finished(content);
-            }
-        );
-
-        _thread.Start();
-    }
-
-    public void CopyResultTo(ref CommandResult result, bool isStdOut)
-    {
-        if (_thread == null)
-        {
-            throw new ArgumentException("Data hasn't been fetched, yet!");
-        }
-
-        if (_thread.ThreadState != ThreadState.Stopped)
-        {
-            throw new ArgumentException("Fetching hasn't been finished, yet!");
-        }
+        base.CopyResultTo(ref result, isStdOut);
 
         if (isStdOut)
         {
@@ -65,15 +28,5 @@ internal class StreamStringReader : IStreamReader
         {
             result = result with { StderrData = null, Stderr = Data };
         }
-    }
-
-    public void Wait()
-    {
-        _thread?.Join();
-    }
-
-    public Task WaitAsync()
-    {
-        return _completionSource?.Task ?? Task.FromResult(String.Empty);
     }
 }
