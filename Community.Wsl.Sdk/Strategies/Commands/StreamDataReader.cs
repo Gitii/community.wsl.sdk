@@ -45,7 +45,10 @@ internal class StreamDataReader : IStreamReader
                 var data = stream.ToArray();
                 Finished(data);
             }
-        ) { IsBackground = true };
+        )
+        {
+            IsBackground = true
+        };
 
         _thread.Start();
     }
@@ -57,7 +60,7 @@ internal class StreamDataReader : IStreamReader
             throw new Exception("Data hasn't been fetched, yet!");
         }
 
-        if (_thread.ThreadState != ThreadState.Stopped)
+        if (!_completionSource?.Task.IsCompleted ?? false)
         {
             throw new Exception("Fetching hasn't been finished, yet!");
         }
@@ -84,6 +87,6 @@ internal class StreamDataReader : IStreamReader
             return Task.CompletedTask;
         }
 
-        return _completionSource.Task.ContinueWith(task => Task.Delay(1), TaskScheduler.Default);
+        return _completionSource.Task;
     }
 }
