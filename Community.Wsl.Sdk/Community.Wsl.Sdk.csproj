@@ -21,6 +21,7 @@
 	  <Company />
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../RELEASE-NOTES.txt"))</PackageReleaseNotes>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows|AnyCPU'">

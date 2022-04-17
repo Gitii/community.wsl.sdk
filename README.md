@@ -131,6 +131,4 @@ Breaking changes:
 
 * Changed namespace `Community.Wsl.Sdk.Strategies.Command` to `Community.Wsl.Sdk.Strategies.Commands`
 
-
-
 Please use the managed api (`Managed{WslApi,Command}`). It has the same features and is easier to use.
