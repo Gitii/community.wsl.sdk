@@ -45,7 +45,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: "./nuget/*.nupkg"
+          prerelease: ${{ endsWith(steps.tagName.outputs.tag, '[-][\w\d]') }}
       - name: Push packages to Nuget registry
-        run: dotnet nuget push $(Get-ChildItem -Path ./nuget -Filter "*.nupkg").FullName --source "https://api.nuget.org/v3/index.json" --api-key "$env:NUGET_API_KEY" --skip-duplicate --no-symbols 1
+        run: dotnet nuget push $(Get-ChildItem -Path ./nuget -Filter "*.nupkg").FullName --source "https://api.nuget.org/v3/index.json" --api-key "$env:NUGET_API_KEY"
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
