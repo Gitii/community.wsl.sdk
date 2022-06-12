@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net6.0-windows</TargetFrameworks>
+    <TargetFrameworks>net6.0-windows</TargetFrameworks>
     <SupportedOSPlatform>windows</SupportedOSPlatform>
-    <Description>SDK for Windows Subsystem for Linux for .NET 5, 6 and Standard 2.1</Description>
+    <Description>SDK for Windows Subsystem for Linux for .NET 6</Description>
     <Copyright>(c) 2021 Gitii</Copyright>
     <PackageProjectUrl>https://github.com/Gitii/community.wsl.sdk</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
