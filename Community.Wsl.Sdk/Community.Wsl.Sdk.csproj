@@ -4,7 +4,7 @@
     <TargetFrameworks>net6.0-windows</TargetFrameworks>
     <SupportedOSPlatform>windows</SupportedOSPlatform>
     <Description>SDK for Windows Subsystem for Linux for .NET 6</Description>
-    <Copyright>(c) 2021 Gitii</Copyright>
+    <Copyright>(c) 2022 Gitii</Copyright>
     <PackageProjectUrl>https://github.com/Gitii/community.wsl.sdk</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -55,7 +55,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+    <PackageReference Include="Community.Wsx.Shared">
+        <Version>1.0.3</Version>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

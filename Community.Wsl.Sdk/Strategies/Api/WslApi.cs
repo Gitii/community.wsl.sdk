@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Community.Wsx.Shared;
 
 namespace Community.Wsl.Sdk.Strategies.Api;
 
@@ -58,13 +59,13 @@ public class WslApi : IWslApi
 
         var systemDirectory = _environment.GetFolderPath(Environment.SpecialFolder.System);
 
-        if (!_io.Exists(_io.Combine(systemDirectory, "wslapi.dll")))
+        if (!_io.FileExists(_io.Combine(systemDirectory, "wslapi.dll")))
         {
             missingCapabilities = "This system does not have WSL enabled.";
             return false;
         }
 
-        if (!_io.Exists(_io.Combine(systemDirectory, "wsl.exe")))
+        if (!_io.FileExists(_io.Combine(systemDirectory, "wsl.exe")))
         {
             missingCapabilities = "This system does not have wsl.exe CLI.";
             return false;
