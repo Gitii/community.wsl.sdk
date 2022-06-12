@@ -138,7 +138,7 @@ Breaking changes:
 * Support for Net. 5 has been removed. Net. 5 is [out of support since May 10, 2022](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
 * Support for .NET Core 3.1 has been removed. .NET Core 3.1 will be [out of support after December 13, 2022](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
 * Migrated to `Community.Wsx.Shared` (replaces most interfaces and implementations for )
-* Moved `Strategies.{Api,Commands}.*` to root namespace.
+* Moved classes & interfaces in `Strategies.{Api,Commands}.*` to root namespace.
 
 Please upgrade to a newer .NET and .NET Core runtime version.
 The minimum supported Net. version is Net. 6.
