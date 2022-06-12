@@ -7,7 +7,7 @@ using Community.Wsx.Shared;
 namespace Community.Wsl.Sdk;
 
 /// <summary>
-/// <inheritdoc cref="IWslApi"/>
+/// <inheritdoc />
 /// </summary>
 public class WslApi : IWslApi
 {
@@ -26,7 +26,15 @@ public class WslApi : IWslApi
     }
 
     /// <summary>
-    /// <inheritdoc cref="IWslApi.IsWslSupported(out string?)"/>
+    /// <inheritdoc />
+    /// </summary>
+    public bool IsWslSupported()
+    {
+        return IsWslSupported(out _);
+    }
+
+    /// <summary>
+    /// <inheritdoc />
     /// </summary>
     public bool IsWslSupported(out string? missingCapabilities)
     {
@@ -57,27 +65,36 @@ public class WslApi : IWslApi
             return false;
         }
 
-        var systemDirectory = _environment.GetFolderPath(Environment.SpecialFolder.System);
-
-        if (!_io.FileExists(_io.Combine(systemDirectory, "wslapi.dll")))
-        {
-            missingCapabilities = "This system does not have WSL enabled.";
-            return false;
-        }
-
-        if (!_io.FileExists(_io.Combine(systemDirectory, "wsl.exe")))
-        {
-            missingCapabilities = "This system does not have wsl.exe CLI.";
-            return false;
-        }
-
         return true;
     }
 
     /// <summary>
-    /// <inheritdoc cref="IWslApi.GetDistroList"/>
+    /// <inheritdoc />
     /// </summary>
-    public IReadOnlyList<DistroInfo> GetDistroList()
+    public bool IsInstalled
+    {
+        get
+        {
+            var systemDirectory = _environment.GetFolderPath(Environment.SpecialFolder.System);
+
+            if (!_io.FileExists(_io.Combine(systemDirectory, "wslapi.dll")))
+            {
+                return false;
+            }
+
+            if (!_io.FileExists(_io.Combine(systemDirectory, "wsl.exe")))
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
+    public IReadOnlyList<DistroInfo> GetDistributionList()
     {
         if (!((IWslApi)this).IsWslSupported(out var missingCapabilities))
         {
@@ -132,5 +149,13 @@ public class WslApi : IWslApi
             DefaultUid = 0,
             DefaultEnvironmentVariables = Array.Empty<string>()
         };
+    }
+
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
+    public DistroInfo? GetDefaultDistribution()
+    {
+        return GetDistributionList().FirstOrDefault((d) => d.IsDefault);
     }
 }
