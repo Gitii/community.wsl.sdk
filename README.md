@@ -91,7 +91,7 @@ var result = cmd.StartAndGetResults();
 
 # Unit tests and Mocks
 
-Both `WslApi` and `Command` implement interfaces, namely `IWslApi` and `ICommand`. If you already use mocking frameworks & DI, use them to create a `test friedly` class, for example using `FakeItEasy`:
+Both `WslApi` and `Command` implement interfaces, namely `IWslApi` and `ICommand`. If you already use mocking frameworks & DI, use them to create a test friendly class, for example using `FakeItEasy`:
 
 ```
 var api = A.Fake<IWslApi>();
@@ -135,10 +135,10 @@ Please use the managed api (`Managed{WslApi,Command}`). It has the same features
 
 Breaking changes:
 
-- Support for Net. 5 has been removed. Net. 5 is [out of support since May 10, 2022](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
+- Support for .Net 5 has been removed. .Net 5 is [out of support since May 10, 2022](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
 - Support for .NET Core 3.1 has been removed. .NET Core 3.1 will be [out of support after December 13, 2022](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
-- Migrated to `Community.Wsx.Shared` (replaces most interfaces and implementations for )
+- Migrated to `Community.Wsx.Shared` (replaces most interfaces and implementations for .Net framework)
 - Moved classes & interfaces in `Strategies.{Api,Commands}.*` to root namespace.
 
 Please upgrade to a newer .NET and .NET Core runtime version.
-The minimum supported Net. version is Net. 6.
+The minimum supported .Net version is .Net 6.

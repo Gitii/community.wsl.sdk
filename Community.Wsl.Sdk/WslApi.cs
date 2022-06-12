@@ -96,7 +96,7 @@ public class WslApi : IWslApi
     /// </summary>
     public IReadOnlyList<DistroInfo> GetDistributionList()
     {
-        if (!((IWslApi)this).IsWslSupported(out var missingCapabilities))
+        if (!this.IsWslSupported(out var missingCapabilities))
         {
             throw new PlatformNotSupportedException(missingCapabilities);
         }
