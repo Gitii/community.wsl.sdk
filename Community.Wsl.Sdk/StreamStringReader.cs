@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Community.Wsl.Sdk.Strategies.Commands;
+namespace Community.Wsl.Sdk;
 
 internal class StreamStringReader : StreamDataReader
 {

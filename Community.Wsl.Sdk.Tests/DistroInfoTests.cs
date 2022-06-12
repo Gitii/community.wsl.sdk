@@ -1,5 +1,4 @@
 ﻿using System;
-using Community.Wsl.Sdk.Strategies.Api;
 using FluentAssertions;
 using NUnit.Framework;
 

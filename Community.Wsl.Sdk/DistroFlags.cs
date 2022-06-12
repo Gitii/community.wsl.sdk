@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Community.Wsl.Sdk.Strategies.Api;
+namespace Community.Wsl.Sdk;
 
 /// <summary>
 /// The enumeration specifies the behavior of a distribution in the Windows Subsystem for Linux (WSL).

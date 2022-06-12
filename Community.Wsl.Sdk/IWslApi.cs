@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Community.Wsl.Sdk.Strategies.Api;
+namespace Community.Wsl.Sdk;
 
 /// <summary>
 /// Provides functionality to help you call WSL from .NET applications.

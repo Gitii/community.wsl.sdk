@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Community.Wsx.Shared;
 
-namespace Community.Wsl.Sdk.Strategies.Api;
+namespace Community.Wsl.Sdk;
 
 /// <summary>
 /// <inheritdoc cref="IWslApi"/>
@@ -96,7 +96,7 @@ public class WslApi : IWslApi
                 (keyName) =>
                     ReadFromRegistryKey(
                         lxssKey.OpenSubKey(keyName)!,
-                        Guid.Parse(keyName),
+                        Guid.Parse((string)keyName),
                         defaultGuid
                     )
             )
