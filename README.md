@@ -8,7 +8,6 @@ features into existing Windows applications. You can enumerate, query, executing
 ## Supported frameworks
 
 - .NET Standard 2.1
-- .Net 5
 - .Net 6
 
 ## Supported Operating Systems
@@ -132,3 +131,11 @@ Breaking changes:
 * Changed namespace `Community.Wsl.Sdk.Strategies.Command` to `Community.Wsl.Sdk.Strategies.Commands`
 
 Please use the managed api (`Managed{WslApi,Command}`). It has the same features and is easier to use.
+
+# Migrate from v2 to v3
+
+Breaking changes:
+
+* Support for Net. 5 has been removed. Net. 5 is [out of support since May 10, 2022](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
+
+Please upgrade to a supported .NET and .NET Core runtime version.
