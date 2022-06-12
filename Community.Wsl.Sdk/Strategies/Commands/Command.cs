@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using Community.Wsl.Sdk.Strategies.Api;
+using Community.Wsx.Shared;
 
 namespace Community.Wsl.Sdk.Strategies.Commands;
 

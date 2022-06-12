@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Community.Wsl.Sdk.Strategies.Api;
 using Community.Wsl.Sdk.Strategies.Commands;
 using FakeItEasy;
 using FluentAssertions;
