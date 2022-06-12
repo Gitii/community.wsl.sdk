@@ -2,7 +2,7 @@
 
 > :exclamation: **Fork**: This repository is based on the awsome work of [wslhub/wsl-sdk-dotnet](https://github.com/wslhub/wsl-sdk-dotnet)
 
-This project contains a WSL API wrapper for Windows developers who wants to integrate WSL 
+This project contains a WSL API wrapper for Windows developers who wants to integrate WSL
 features into existing Windows applications. You can enumerate, query, executing WSL commands via C# classes.
 
 ## Supported frameworks
@@ -45,7 +45,7 @@ dotnet add package Community.Wsl.Sdk
 ### Basic usage of wsl api
 
 ```csharp
-using Community.Wsl.Sdk.Strategies.Api;
+using Community.Wsl.Sdk;
 
 // Create instance
 var api = new WslApi();
@@ -67,14 +67,14 @@ var defaultDistro = api.GetDefaultDistro();
 ### Basic command execution
 
 ```csharp
-using Community.Wsl.Sdk.Strategies.Api;
+using Community.Wsl.Sdk;
 
 // Setup
 var api = new WslApi();
 
 var distroName = api.GetDefaultDistro()!.Value.DistroName;
 
-// Get command result 
+// Get command result
 var cmd = new Command(
     distroName,
     "echo",
@@ -119,15 +119,15 @@ var api = new WslApi(
 
 Breaking changes:
 
-* `ComBasedWslApi` has been removed
+- `ComBasedWslApi` has been removed
 
-* `ComCommand` has been removed
+- `ComCommand` has been removed
 
-* `ManagedWslApi` has been renamed to `WslApi`
+- `ManagedWslApi` has been renamed to `WslApi`
 
-* `ManagedCommand` has been remamed to `Command`
+- `ManagedCommand` has been remamed to `Command`
 
-* Changed namespace `Community.Wsl.Sdk.Strategies.Command` to `Community.Wsl.Sdk.Strategies.Commands`
+- Changed namespace `Community.Wsl.Sdk.Strategies.Command` to `Community.Wsl.Sdk.Strategies.Commands`
 
 Please use the managed api (`Managed{WslApi,Command}`). It has the same features and is easier to use.
 
@@ -135,10 +135,10 @@ Please use the managed api (`Managed{WslApi,Command}`). It has the same features
 
 Breaking changes:
 
-* Support for Net. 5 has been removed. Net. 5 is [out of support since May 10, 2022](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
-* Support for .NET Core 3.1 has been removed. .NET Core 3.1 will be [out of support after December 13, 2022](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
-* Migrated to `Community.Wsx.Shared` (replaces most interfaces and implementations for )
-* Moved classes & interfaces in `Strategies.{Api,Commands}.*` to root namespace.
+- Support for Net. 5 has been removed. Net. 5 is [out of support since May 10, 2022](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
+- Support for .NET Core 3.1 has been removed. .NET Core 3.1 will be [out of support after December 13, 2022](https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core).
+- Migrated to `Community.Wsx.Shared` (replaces most interfaces and implementations for )
+- Moved classes & interfaces in `Strategies.{Api,Commands}.*` to root namespace.
 
 Please upgrade to a newer .NET and .NET Core runtime version.
 The minimum supported Net. version is Net. 6.
