@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Community.Wsl.Sdk.Strategies.Commands;
 using FluentAssertions;
 using NUnit.Framework;
 

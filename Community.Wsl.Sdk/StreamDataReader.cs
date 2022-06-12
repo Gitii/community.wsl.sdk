@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Community.Wsl.Sdk.Strategies.Commands;
+namespace Community.Wsl.Sdk;
 
 internal class StreamDataReader : IStreamReader
 {
@@ -45,10 +45,7 @@ internal class StreamDataReader : IStreamReader
                 var data = stream.ToArray();
                 Finished(data);
             }
-        )
-        {
-            IsBackground = true
-        };
+        ) { IsBackground = true };
 
         _thread.Start();
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Community.Wsl.Sdk.Strategies.Commands;
 using Community.Wsx.Shared;
 using FakeItEasy;
 using FluentAssertions;
