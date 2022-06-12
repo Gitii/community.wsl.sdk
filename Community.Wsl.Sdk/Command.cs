@@ -6,6 +6,9 @@ using Community.Wsx.Shared;
 
 namespace Community.Wsl.Sdk;
 
+/// <summary>
+/// Implementation for execution of commands in a wsl distribution.
+/// </summary>
 public class Command : ICommand
 {
     private readonly string[] _arguments;
@@ -55,7 +58,7 @@ public class Command : ICommand
         if (
             options.StdInDataProcessingMode
             is DataProcessingMode.Binary
-            or DataProcessingMode.String
+                or DataProcessingMode.String
         )
         {
             throw new ArgumentException(
@@ -69,6 +72,9 @@ public class Command : ICommand
 
     internal IStreamReader StdoutReader => _stdoutReader;
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     public void Dispose()
     {
         if (!_isDisposed)
@@ -79,14 +85,29 @@ public class Command : ICommand
         }
     }
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     public bool IsStarted => _isStarted;
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     public bool HasWaited => _hasWaited;
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     public bool IsDisposed => _isDisposed;
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     public bool HasExited => _process?.HasExited ?? false;
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     public CommandStreams Start()
     {
         if (IsStarted)
@@ -133,6 +154,9 @@ public class Command : ICommand
         };
     }
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     public CommandResult WaitAndGetResults()
     {
         if (!IsStarted)
@@ -165,6 +189,9 @@ public class Command : ICommand
         return result;
     }
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     public async Task<CommandResult> WaitAndGetResultsAsync()
     {
         if (!IsStarted)
@@ -197,12 +224,18 @@ public class Command : ICommand
         return result;
     }
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     public CommandResult StartAndGetResults()
     {
         Start();
         return WaitAndGetResults();
     }
 
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     public Task<CommandResult> StartAndGetResultsAsync()
     {
         Start();
