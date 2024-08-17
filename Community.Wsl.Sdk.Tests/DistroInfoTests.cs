@@ -22,7 +22,7 @@ public class DistroInfoTests
             WslVersion = 2
         };
 
-        di.DistroId.Should().Equals(Guid.Empty);
+        di.DistroId.Should().Be(Guid.Empty);
         di.BasePath.Should().Be("path");
         di.DefaultEnvironmentVariables.Should().BeEmpty();
         di.DefaultUid.Should().Be(0);

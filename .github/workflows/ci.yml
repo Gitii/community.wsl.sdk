@@ -13,12 +13,13 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: | 
           6.0.x
+          8.0.x
     - name: Decode the Pfx
       run: |
         $signing_keys_payload = [System.Convert]::FromBase64String("${{ secrets.SIGNING_KEY }}")
@@ -33,7 +34,7 @@ jobs:
     - name: Generate coverage
       run: ./generate-coverage.cmd
     - name: Upload code coverage results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: code-coverage-report
         path: CoverageResults
@@ -45,14 +46,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Download code coverage resilts
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: code-coverage-report
         path: CoverageResults
     - name: Code Coverage Summary Report
-      uses: irongut/CodeCoverageSummary@v1.2.0
+      uses: irongut/CodeCoverageSummary@v1.3.0
       with:
-        filename: CoverageResults/coverage.cobertura.xml
+        filename: CoverageResults/coverage.net6.0-windows7.0.cobertura.xml
         badge: true
         fail_below_min: true
         format: markdown

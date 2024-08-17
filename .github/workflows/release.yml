@@ -14,15 +14,16 @@ jobs:
         with:
           tagRegex: "v(.*)" 
           tagRegexGroup: 1
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Extract release notes
         run: |
           git log --pretty=format:'%d %s' ${GITHUB_REF} | perl -pe 's| \(.*tag: v(\d+.\d+.\d+(-preview\d{3})?)(, .*?)*\)|\n## \1\n|g' > ./RELEASE-NOTES.txt; if (-! $?) { exit 1 } else { exit $LastExitCode }
       - name: Setup .NET SDKs
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: | 
             6.0.x
+            8.0.x
           include-prerelease: true
       - name: Decode the Pfx
         run: |
@@ -42,7 +43,7 @@ jobs:
         env:
           TAG_NAME: ${{ steps.tagName.outputs.tag }}
       - name: Attach nuget packages to Github releases
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: "./nuget/*.nupkg"
           prerelease: ${{ contains(steps.tagName.outputs.tag, '-') }}
