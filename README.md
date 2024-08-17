@@ -8,6 +8,7 @@ features into existing Windows applications. You can enumerate, query, executing
 ## Supported frameworks
 
 - .Net 6
+- .Net 8
 
 ## Supported Operating Systems
 

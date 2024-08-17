@@ -26,6 +26,11 @@ jobs:
         $certificatePath = Join-Path -Path $currentDirectory -ChildPath "sgKey.snk"
         [IO.File]::WriteAllBytes("$certificatePath", $signing_keys_payload)
         if (-! $?) { exit 1 } else { exit $LastExitCode }
+    - name: Upload code coverage results 2
+      uses: actions/upload-artifact@v2
+      with:
+        name: sgKey
+        path: sgKey.snk
     - name: Build
       run: dotnet build --configuration Release
     - name: Test

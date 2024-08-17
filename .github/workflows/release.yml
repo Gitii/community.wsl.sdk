@@ -23,6 +23,7 @@ jobs:
         with:
           dotnet-version: | 
             6.0.x
+            8.0.x
           include-prerelease: true
       - name: Decode the Pfx
         run: |
