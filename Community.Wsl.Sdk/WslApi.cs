@@ -109,6 +109,7 @@ public class WslApi : IWslApi
 
         return lxssKey
             .GetSubKeyNames()
+            .Where((keyName => Guid.TryParse(keyName, out _)))
             .Select(
                 (keyName) =>
                     ReadFromRegistryKey(
